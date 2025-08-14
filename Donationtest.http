@@ -1,0 +1,47 @@
+
+### GET /donations
+
+
+GET http://localhost:3002/api/v1/donations
+Accept: application/json
+
+
+### POST /donations
+
+POST http://localhost:3002/api/v1/donations
+Content-Type: application/json
+
+{
+  "title": "Donation Title",
+  "description": "Donation Description",
+  "donorId": 1,
+  "imageUrl": "http://example.com/image.jpg",
+  "latitude": 12.345678,
+  "longitude": 98.765432,
+  "expiryDate": null,
+  "urgency": false,
+  "categoryId": 1
+}
+
+### PUT /donations/:id
+
+PUT http://localhost:3002/api/v1/donations/9
+Content-Type: application/json
+
+{
+  "id": 7,
+  "title": "Updated Donation Title",
+  "description": "Updated Donation Description",
+  "donorId": 1,
+  "imageUrl": "http://example.com/image.jpg",
+  "latitude": 12.345678,
+  "longitude": 98.765432,
+  "expiryDate": null,
+  "urgency": false,
+  "categoryId": 1
+}
+
+### DELETE /donations/:id
+
+DELETE http://localhost:3002/api/v1/donations/1
+Accept: application/json

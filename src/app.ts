@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { envs } from "./config/envs";
 import { AppRouter } from "./presentation/router";
 

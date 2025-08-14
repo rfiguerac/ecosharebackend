@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserReputation {
+  id         Int      @id @default(autoincrement())
+  score      Int      @default(0)
+  comment    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  // Relación con el usuario que recibe la calificación
+  reviewee   User     @relation("ReviewedUser", fields: [revieweeId], references: [id])
+  revieweeId Int
+  // Relación con el usuario que da la calificación
+  reviewer   User     @relation("ReviewingUser", fields: [reviewerId], references: [id])
+  reviewerId Int
+}
+
+// Actualización del modelo User
+model User {
+  id              Int                   @id @default(autoincrement())
+  email           String                @unique
+  name            String?
+  password        String
+  role            UserRole              @default(User)
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  donations       Donation[]            @relation("DonatedBy")
+  transactions    DonationTransaction[] @relation("ReceivedBy")
+  // Relaciones para la reputación
+  reviewsReceived UserReputation[]      @relation("ReviewedUser")
+  reviewsGiven    UserReputation[]      @relation("ReviewingUser")
+}
+
+enum UserRole {
+  Admin
+  User
+}
+
+model Donation {
+  id          Int                  @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String
+  expiryDate  DateTime?
+  urgency     Boolean              @default(false)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  categoryId  Int
+  category    Category             @relation(fields: [categoryId], references: [id])
+  // El donador de este artículo
+  donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
+  donorId     Int
+  // La ubicación de la donación
+  latitude    Float
+  longitude   Float
+  // La transacción relacionada con esta donación (reserva o donación final)
+  transaction DonationTransaction?
+}
+
+// Renombramos DonatedItem a DonationTransaction para mayor claridad
+model DonationTransaction {
+  id Int @id @default(autoincrement())
+
+  status     TransactionStatus @default(Reserved)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  // La donación que se está reservando/donando
+  donation   Donation          @relation(fields: [donationId], references: [id])
+  donationId Int               @unique
+  // El usuario que está reservando/recibiendo la donación
+  receiver   User              @relation("ReceivedBy", fields: [receiverId], references: [id])
+  receiverId Int
+}
+
+enum TransactionStatus {
+  Reserved // El usuario ha reservado el artículo
+  Donated // El donador ha marcado el artículo como entregado
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  donations   Donation[]
+}
