@@ -5,6 +5,12 @@
 GET http://localhost:3002/api/v1/donations
 Accept: application/json
 
+### GET /donations/:id
+
+
+GET http://localhost:3002/api/v1/donations/7
+Accept: application/json
+
 
 ### POST /donations
 
@@ -25,7 +31,7 @@ Content-Type: application/json
 
 ### PUT /donations/:id
 
-PUT http://localhost:3002/api/v1/donations/9
+PUT http://localhost:3002/api/v1/donations/7
 Content-Type: application/json
 
 {

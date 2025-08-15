@@ -4,7 +4,12 @@ import {
   DonationRepository,
   UpdateDonationDto,
 } from "../../domain";
-import { CreateDonation, UpdateDonation } from "../../domain/use-case";
+import {
+  CreateDonation,
+  ListDonations,
+  UpdateDonation,
+  GetDonation,
+} from "../../domain";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
@@ -22,7 +27,10 @@ export class DonationController {
 
   getById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json();
+      const id = Number(req.params.id);
+      new GetDonation(this.donationRepository).execute(id).then((donation) => {
+        res.json(donation.toResponse());
+      });
     } catch (err) {
       next(err);
     }
@@ -30,7 +38,9 @@ export class DonationController {
 
   list = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json(req.body);
+      new ListDonations(this.donationRepository).execute().then((donations) => {
+        res.json(donations.map((donation) => donation.toResponse()));
+      });
     } catch (err) {
       next(err);
     }

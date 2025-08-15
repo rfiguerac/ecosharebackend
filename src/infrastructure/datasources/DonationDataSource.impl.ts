@@ -23,19 +23,7 @@ export class DonationDataSourceImpl implements DonationDataSource {
       },
     });
 
-    return new DonationEntity(
-      donation.id,
-      donation.title,
-      donation.donorId,
-      donation.categoryId,
-      donation.description,
-      donation.imageUrl,
-      donation.latitude,
-      donation.longitude,
-      donation.expiryDate,
-      donation.createdAt,
-      donation.updatedAt
-    );
+    return DonationEntity.fromObject(donation);
   }
 
   // Buscar donación por ID
@@ -43,40 +31,15 @@ export class DonationDataSourceImpl implements DonationDataSource {
     const donation = await prisma.donation.findUnique({ where: { id } });
     if (!donation) throw new Error(`Donation with id ${id} not found`);
 
-    return new DonationEntity(
-      donation.id,
-      donation.title,
-      donation.donorId,
-      donation.categoryId,
-      donation.description,
-      donation.imageUrl,
-      donation.latitude,
-      donation.longitude,
-      donation.expiryDate,
-      donation.createdAt,
-      donation.updatedAt
-    );
+    return DonationEntity.fromObject(donation);
   }
 
   // Listar todas las donaciones
   async findAll(): Promise<DonationEntity[]> {
     const donations = await prisma.donation.findMany();
-    return donations.map(
-      (donation) =>
-        new DonationEntity(
-          donation.id,
-          donation.title,
-          donation.donorId,
-          donation.categoryId,
-          donation.description,
-          donation.imageUrl,
-          donation.latitude,
-          donation.longitude,
-          donation.expiryDate,
-          donation.createdAt,
-          donation.updatedAt
-        )
-    );
+    return donations.map((donation) => {
+      return DonationEntity.fromObject(donation);
+    });
   }
 
   // Actualizar una donación
@@ -95,37 +58,13 @@ export class DonationDataSourceImpl implements DonationDataSource {
       },
     });
 
-    return new DonationEntity(
-      donation.id,
-      donation.title,
-      donation.donorId,
-      donation.categoryId,
-      donation.description,
-      donation.imageUrl,
-      donation.latitude,
-      donation.longitude,
-      donation.expiryDate,
-      donation.createdAt,
-      donation.updatedAt
-    );
+    return DonationEntity.fromObject(donation);
   }
 
   // Eliminar una donación por ID
   async deleteById(id: number): Promise<DonationEntity> {
     const donation = await prisma.donation.delete({ where: { id } });
 
-    return new DonationEntity(
-      donation.id,
-      donation.title,
-      donation.donorId,
-      donation.categoryId,
-      donation.description,
-      donation.imageUrl,
-      donation.latitude,
-      donation.longitude,
-      donation.expiryDate,
-      donation.createdAt,
-      donation.updatedAt
-    );
+    return DonationEntity.fromObject(donation);
   }
 }

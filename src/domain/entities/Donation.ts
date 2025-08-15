@@ -48,4 +48,32 @@ export class Donation {
       expired: this.isExpired(),
     };
   }
+
+  public static fromObject(donationData: {
+    id: number | null;
+    title: string;
+    donorId: number;
+    categoryId: number;
+    description: string;
+    imageUrl: string;
+    latitude: number;
+    longitude: number;
+    expiryDate: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }): Donation {
+    return new Donation(
+      donationData.id,
+      donationData.title,
+      donationData.donorId,
+      donationData.categoryId,
+      donationData.description,
+      donationData.imageUrl,
+      donationData.latitude,
+      donationData.longitude,
+      donationData.expiryDate,
+      donationData.createdAt,
+      donationData.updatedAt
+    );
+  }
 }
