@@ -8,10 +8,10 @@ export class Donation {
   constructor(
     public id: number | null,
     public title: string,
+    public description: string,
+    public images: { imageUrl: string }[],
     public donorId: number,
     public categoryId: number,
-    public description: string,
-    public imageUrl: string,
     public latitude: number,
     public longitude: number,
     public expiryDate: Date | null,
@@ -39,7 +39,6 @@ export class Donation {
       donorId: this.donorId,
       categoryId: this.categoryId,
       description: this.description,
-      imageUrl: this.imageUrl,
       latitude: this.latitude,
       longitude: this.longitude,
       expiryDate: this.expiryDate,
@@ -49,31 +48,19 @@ export class Donation {
     };
   }
 
-  public static fromObject(donationData: {
-    id: number | null;
-    title: string;
-    donorId: number;
-    categoryId: number;
-    description: string;
-    imageUrl: string;
-    latitude: number;
-    longitude: number;
-    expiryDate: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
-  }): Donation {
+  public static fromObject(donationData: any): Donation {
     return new Donation(
       donationData.id,
       donationData.title,
       donationData.donorId,
       donationData.categoryId,
       donationData.description,
-      donationData.imageUrl,
       donationData.latitude,
       donationData.longitude,
       donationData.expiryDate,
       donationData.createdAt,
-      donationData.updatedAt
+      donationData.updatedAt,
+      donationData.images.map((image: any) => ({ imageUrl: image.imageUrl }))
     );
   }
 }

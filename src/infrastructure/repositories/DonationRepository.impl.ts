@@ -9,8 +9,11 @@ import {
 export class DonationRepositoryImpl implements DonationRepository {
   constructor(private readonly datasource: DonationDataSource) {}
 
-  create = async (dto: CreateDonationDto): Promise<Donation> => {
-    return this.datasource.create(dto);
+  create = async (
+    dto: CreateDonationDto,
+    imageUrls: string[]
+  ): Promise<Donation> => {
+    return this.datasource.create(dto, imageUrls);
   };
 
   getById = async (id: number): Promise<Donation> => {

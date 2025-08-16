@@ -8,18 +8,32 @@ import { prisma } from "../../data/posgresql";
 
 export class DonationDataSourceImpl implements DonationDataSource {
   // Crear una donación
-  async create(data: CreateDonationDto): Promise<DonationEntity> {
+  async create(
+    data: CreateDonationDto,
+    imageUrls: string[]
+  ): Promise<DonationEntity> {
     const donation = await prisma.donation.create({
       data: {
         title: data.title,
         description: data.description,
-        imageUrl: data.imageUrl,
         expiryDate: data.expiryDate ? new Date(data.expiryDate) : null,
         urgency: data.urgency,
         categoryId: data.categoryId,
         donorId: data.donorId,
         latitude: data.latitude,
         longitude: data.longitude,
+        // Crea las imágenes relacionadas en la misma operación
+        images: {
+          createMany: {
+            data: imageUrls.map((url) => ({
+              imageUrl: url,
+            })),
+          },
+        },
+      },
+      // Es crucial incluir las imágenes en el resultado para que el `fromObject` funcione
+      include: {
+        images: true,
       },
     });
 
@@ -49,7 +63,6 @@ export class DonationDataSourceImpl implements DonationDataSource {
       data: {
         title: dto.title!,
         description: dto.description!,
-        imageUrl: dto.imageUrl!,
         expiryDate: dto.expiryDate ? new Date(dto.expiryDate) : null,
         urgency: dto.urgency!,
         categoryId: dto.categoryId!,

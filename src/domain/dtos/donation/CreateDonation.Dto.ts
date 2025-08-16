@@ -6,6 +6,7 @@ import {
   IsUrl,
   ValidateNested,
   IsBoolean,
+  IsArray,
 } from "class-validator";
 import { Type } from "class-transformer";
 
@@ -22,8 +23,9 @@ export class CreateDonationDto {
   @IsString()
   description!: string;
 
-  @IsUrl()
-  imageUrl!: string;
+  @IsArray()
+  @IsUrl({}, { each: true })
+  imageUrls!: string[];
 
   @IsNumber()
   latitude!: number;

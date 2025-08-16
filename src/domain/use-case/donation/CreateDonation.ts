@@ -4,7 +4,10 @@ import { CreateDonationDto } from "../../dtos";
 
 export class CreateDonation {
   constructor(private repo: DonationRepository) {}
-  async execute(dto: CreateDonationDto): Promise<Donation> {
-    return this.repo.create(dto);
+  async execute(
+    dto: CreateDonationDto,
+    imageUrls: string[]
+  ): Promise<Donation> {
+    return this.repo.create(dto, imageUrls);
   }
 }

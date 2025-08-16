@@ -1,12 +1,4 @@
-
-
-
-
 class CategoryController {
-
-    constructor(){
-        private readonly categoryRepository: CategoryRepository;
-    }
-
-    
+  constructor() //private readonly categoryRepository: CategoryRepository
+  {}
 }

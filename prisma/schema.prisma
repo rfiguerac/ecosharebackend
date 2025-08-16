@@ -43,25 +43,33 @@ enum UserRole {
   User
 }
 
+// Elimina imageUrl del modelo Donation
 model Donation {
   id          Int                  @id @default(autoincrement())
   title       String
   description String
-  imageUrl    String
   expiryDate  DateTime?
   urgency     Boolean              @default(false)
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
   categoryId  Int
   category    Category             @relation(fields: [categoryId], references: [id])
-  // El donador de este artículo
   donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
   donorId     Int
-  // La ubicación de la donación
   latitude    Float
   longitude   Float
-  // La transacción relacionada con esta donación (reserva o donación final)
   transaction DonationTransaction?
+  images      DonationImage[] // Añade esta línea para la relación
+}
+
+// Crea un nuevo modelo para las imágenes de la donación
+model DonationImage {
+  id         Int      @id @default(autoincrement())
+  imageUrl   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  donationId Int
+  donation   Donation @relation(fields: [donationId], references: [id]) // Relación con Donation
 }
 
 // Renombramos DonatedItem a DonationTransaction para mayor claridad
