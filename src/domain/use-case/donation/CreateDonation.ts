@@ -1,3 +1,5 @@
+// src/domain/use-case/donation/CreateDonation.ts
+
 import { Donation } from "../..";
 import { DonationRepository } from "../../../domain";
 import { CreateDonationDto } from "../../dtos";
@@ -6,7 +8,7 @@ export class CreateDonation {
   constructor(private repo: DonationRepository) {}
   async execute(
     dto: CreateDonationDto,
-    imageUrls: string[]
+    imageUrls: string[] // Corrección: Se añade este parámetro
   ): Promise<Donation> {
     return this.repo.create(dto, imageUrls);
   }

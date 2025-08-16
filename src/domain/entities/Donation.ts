@@ -1,3 +1,5 @@
+// src/domain/entities/Donation.ts
+
 export interface Location {
   id: number;
   latitude: number;
@@ -16,7 +18,8 @@ export class Donation {
     public longitude: number,
     public expiryDate: Date | null,
     public createdAt: Date,
-    public updatedAt: Date
+    public updatedAt: Date,
+    public urgency: boolean
   ) {
     this.validate();
   }
@@ -25,7 +28,6 @@ export class Donation {
     if (!this.title || this.title.trim().length < 3) {
       throw new Error("El título debe tener al menos 3 caracteres.");
     }
-    // La validación del estado se ha eliminado porque el estado se gestiona en la tabla de transacciones.
   }
 
   public isExpired(): boolean {
@@ -39,12 +41,14 @@ export class Donation {
       donorId: this.donorId,
       categoryId: this.categoryId,
       description: this.description,
+      images: this.images,
       latitude: this.latitude,
       longitude: this.longitude,
       expiryDate: this.expiryDate,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       expired: this.isExpired(),
+      urgency: this.urgency,
     };
   }
 
@@ -52,15 +56,16 @@ export class Donation {
     return new Donation(
       donationData.id,
       donationData.title,
+      donationData.description,
+      donationData.images, // Corrección: Se pasa directamente el array
       donationData.donorId,
       donationData.categoryId,
-      donationData.description,
       donationData.latitude,
       donationData.longitude,
       donationData.expiryDate,
       donationData.createdAt,
       donationData.updatedAt,
-      donationData.images.map((image: any) => ({ imageUrl: image.imageUrl }))
+      donationData.urgency
     );
   }
 }
