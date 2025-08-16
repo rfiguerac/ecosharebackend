@@ -1,15 +1,12 @@
 import { Router } from "express";
 import { DonationController } from "./DonationController";
 import { validateDto } from "../../middleware/validateDto.middleware";
-import { CreateDonationDto, DonationRepository } from "../../domain";
+import { DonationRepository } from "../../domain";
 import {
   DonationDataSourceImpl,
   DonationRepositoryImpl,
 } from "../../infrastructure";
-
 import multer from "multer";
-
-const upload = multer({ storage: multer.memoryStorage() });
 
 // Configuración de Multer para guardar en disco
 const storage = multer.diskStorage({
@@ -23,19 +20,20 @@ const storage = multer.diskStorage({
   },
 });
 
+const upload = multer({ storage });
+
 export class DonationRouter {
   static router(): Router {
     const router = Router();
-
     const datasource = new DonationDataSourceImpl();
     const donationRepository: DonationRepository = new DonationRepositoryImpl(
       datasource
     );
     const donationController = new DonationController(donationRepository);
 
-    router.post("/", validateDto(CreateDonationDto), donationController.create);
-
+    // Ruta corregida: Usa el middleware de Multer y luego el controlador
     router.post("/", upload.array("images", 5), donationController.create);
+
     router.get("/:id", donationController.getById);
     router.get("/", donationController.list);
     router.put("/:id", donationController.update);

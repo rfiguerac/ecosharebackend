@@ -10,6 +10,8 @@ import {
   UpdateDonation,
   GetDonation,
 } from "../../domain";
+import { validate } from "class-validator";
+import { plainToInstance } from "class-transformer";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
@@ -22,23 +24,20 @@ export class DonationController {
         return res.status(400).json({ error: "Image files are required." });
       }
 
-      // Obtener las URLs de los archivos subidos
+      // Validar el DTO manualmente después de la subida de archivos
+      const createDonationDto = plainToInstance(CreateDonationDto, req.body);
+      const errors = await validate(createDonationDto);
+      if (errors.length > 0) {
+        const messages = errors.flatMap((error) =>
+          Object.values(error.constraints || {})
+        );
+        return res.status(400).json({ errors: messages });
+      }
+
       const imageUrls = files.map(
         (file) => `/uploads/donations/${file.filename}`
       );
 
-      // Se crea el DTO a partir de los datos en req.body
-      const createDonationDto = new CreateDonationDto();
-      createDonationDto.title = req.body.title;
-      createDonationDto.description = req.body.description;
-      createDonationDto.donorId = Number(req.body.donorId);
-      createDonationDto.categoryId = Number(req.body.categoryId);
-      createDonationDto.latitude = Number(req.body.latitude);
-      createDonationDto.longitude = Number(req.body.longitude);
-      createDonationDto.expiryDate = req.body.expiryDate;
-      createDonationDto.urgency = req.body.urgency === "true";
-
-      // Se llama al caso de uso para crear la donación
       const donation = await new CreateDonation(
         this.donationRepository
       ).execute(createDonationDto, imageUrls);
@@ -77,16 +76,15 @@ export class DonationController {
 
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // Se crea el DTO a partir de los datos en req.body
-      const updateDonationDto = new UpdateDonationDto();
+      const updateDonationDto = plainToInstance(UpdateDonationDto, req.body);
       updateDonationDto.id = Number(req.params.id);
-      updateDonationDto.title = req.body.title;
-      updateDonationDto.description = req.body.description;
-      updateDonationDto.categoryId = Number(req.body.categoryId);
-      updateDonationDto.latitude = Number(req.body.latitude);
-      updateDonationDto.longitude = Number(req.body.longitude);
-      updateDonationDto.expiryDate = req.body.expiryDate;
-      updateDonationDto.urgency = req.body.urgency === "true";
+      const errors = await validate(updateDonationDto);
+      if (errors.length > 0) {
+        const messages = errors.flatMap((error) =>
+          Object.values(error.constraints || {})
+        );
+        return res.status(400).json({ errors: messages });
+      }
 
       const donation = await new UpdateDonation(
         this.donationRepository
@@ -101,7 +99,7 @@ export class DonationController {
     try {
       const id = Number(req.params.id);
       await this.donationRepository.deleteById(id);
-      res.status(204).send(); // 204 No Content for successful deletion
+      res.status(204).send();
     } catch (err) {
       next(err);
     }

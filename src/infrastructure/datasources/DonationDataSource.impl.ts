@@ -7,7 +7,6 @@ import { DonationDataSource } from "../../domain/dataSource";
 import { prisma } from "../../data/posgresql";
 
 export class DonationDataSourceImpl implements DonationDataSource {
-  // Crear una donación
   async create(
     data: CreateDonationDto,
     imageUrls: string[]
@@ -22,16 +21,14 @@ export class DonationDataSourceImpl implements DonationDataSource {
         donorId: data.donorId,
         latitude: data.latitude,
         longitude: data.longitude,
-        // Crea las imágenes relacionadas en la misma operación
         images: {
           createMany: {
             data: imageUrls.map((url) => ({
-              imageUrl: url,
+              imageUrl: url, // `imageUrl` es el nombre del campo en tu schema.prisma
             })),
           },
         },
       },
-      // Es crucial incluir las imágenes en el resultado para que el `fromObject` funcione
       include: {
         images: true,
       },
@@ -40,23 +37,25 @@ export class DonationDataSourceImpl implements DonationDataSource {
     return DonationEntity.fromObject(donation);
   }
 
-  // Buscar donación por ID
   async findById(id: number): Promise<DonationEntity> {
-    const donation = await prisma.donation.findUnique({ where: { id } });
+    const donation = await prisma.donation.findUnique({
+      where: { id },
+      include: { images: true },
+    });
     if (!donation) throw new Error(`Donation with id ${id} not found`);
 
     return DonationEntity.fromObject(donation);
   }
 
-  // Listar todas las donaciones
   async findAll(): Promise<DonationEntity[]> {
-    const donations = await prisma.donation.findMany();
+    const donations = await prisma.donation.findMany({
+      include: { images: true },
+    });
     return donations.map((donation) => {
       return DonationEntity.fromObject(donation);
     });
   }
 
-  // Actualizar una donación
   async update(dto: UpdateDonationDto): Promise<DonationEntity> {
     const donation = await prisma.donation.update({
       where: { id: dto.id },
@@ -69,15 +68,17 @@ export class DonationDataSourceImpl implements DonationDataSource {
         latitude: dto.latitude!,
         longitude: dto.longitude!,
       },
+      include: { images: true },
     });
 
     return DonationEntity.fromObject(donation);
   }
 
-  // Eliminar una donación por ID
   async deleteById(id: number): Promise<DonationEntity> {
-    const donation = await prisma.donation.delete({ where: { id } });
-
+    const donation = await prisma.donation.delete({
+      where: { id },
+      include: { images: true },
+    });
     return DonationEntity.fromObject(donation);
   }
 }
