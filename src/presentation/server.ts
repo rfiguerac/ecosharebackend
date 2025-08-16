@@ -21,7 +21,7 @@ export class Server {
     this.app.use(express.json());
 
     // public folder
-    //this.app.use(express.static("public"));
+    this.app.use(express.static("public"));
 
     //* Router
     this.app.use(this.routes);

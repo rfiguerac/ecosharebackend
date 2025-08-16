@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { DonationController } from "./DonationController";
-import { validateDto } from "../../middleware/validateDto.middleware";
 import { DonationRepository } from "../../domain";
 import {
   DonationDataSourceImpl,
