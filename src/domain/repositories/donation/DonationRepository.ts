@@ -9,6 +9,9 @@ export abstract class DonationRepository {
   ): Promise<Donation>;
   abstract getById(id: number): Promise<Donation>;
   abstract getAll(): Promise<Donation[]>;
-  abstract updateById(updateDonationDto: UpdateDonationDto): Promise<Donation>;
+  abstract updateById(
+    id: number,
+    updateDonationDto: UpdateDonationDto
+  ): Promise<Donation>;
   abstract deleteById(id: number): Promise<Donation>;
 }

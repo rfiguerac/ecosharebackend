@@ -8,9 +8,6 @@ import {
 import { Type } from "class-transformer";
 
 export class UpdateDonationDto {
-  @IsNumber()
-  id!: number;
-
   @IsOptional()
   @IsString()
   title?: string;

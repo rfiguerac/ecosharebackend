@@ -5,6 +5,7 @@ import {
 } from "../../domain";
 import { DonationDataSource } from "../../domain/dataSource";
 import { prisma } from "../../data/posgresql";
+import { HttpException } from "../../presentation/errors/HttpException";
 
 export class DonationDataSourceImpl implements DonationDataSource {
   // Crear una donación
@@ -46,7 +47,9 @@ export class DonationDataSourceImpl implements DonationDataSource {
       where: { id },
       include: { images: true },
     });
-    if (!donation) throw new Error(`Donation with id ${id} not found`);
+    if (!donation) {
+      throw new HttpException(404, "Donation not found");
+    }
 
     return DonationEntity.fromObject(donation);
   }
@@ -63,10 +66,11 @@ export class DonationDataSourceImpl implements DonationDataSource {
   }
 
   // Actualizar una donación
-  async update(dto: UpdateDonationDto): Promise<DonationEntity> {
+  async update(id: number, dto: UpdateDonationDto): Promise<DonationEntity> {
+    await this.findById(id); // Verifica que la donación exista
     // Corrección: Se incluye el array de imágenes en la respuesta
     const donation = await prisma.donation.update({
-      where: { id: dto.id },
+      where: { id: id },
       data: {
         title: dto.title!,
         description: dto.description!,
