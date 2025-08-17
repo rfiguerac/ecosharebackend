@@ -12,6 +12,8 @@ import {
 } from "../../domain";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { join } from "path";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
@@ -24,7 +26,7 @@ export class DonationController {
         return res.status(400).json({ error: "Image files are required." });
       }
 
-      // Validar el DTO manualmente después de la subida de archivos
+      // Paso 1: Validar los datos antes de guardar los archivos
       const createDonationDto = plainToInstance(CreateDonationDto, req.body);
       const errors = await validate(createDonationDto);
       if (errors.length > 0) {
@@ -34,10 +36,21 @@ export class DonationController {
         return res.status(400).json({ errors: messages });
       }
 
-      const imageUrls = files.map(
-        (file) => `/uploads/donations/${file.filename}`
-      );
+      // Paso 2: Si la validación pasa, guardar los archivos en el disco
+      const uploadDir = join(process.cwd(), "public/uploads/donations");
+      if (!existsSync(uploadDir)) {
+        mkdirSync(uploadDir, { recursive: true });
+      }
 
+      const imageUrls: string[] = [];
+      files.forEach((file) => {
+        const fileName = `${Date.now()}-${file.originalname}`;
+        const filePath = join(uploadDir, fileName);
+        writeFileSync(filePath, file.buffer);
+        imageUrls.push(`/uploads/donations/${fileName}`);
+      });
+
+      // Paso 3: Llamar al caso de uso para crear la donación en la BD
       const donation = await new CreateDonation(
         this.donationRepository
       ).execute(createDonationDto, imageUrls);

@@ -43,7 +43,6 @@ enum UserRole {
   User
 }
 
-// Elimina imageUrl del modelo Donation
 model Donation {
   id          Int                  @id @default(autoincrement())
   title       String
@@ -59,43 +58,42 @@ model Donation {
   latitude    Float
   longitude   Float
   transaction DonationTransaction?
-  images      DonationImage[] // Añade esta línea para la relación
+  images      DonationImage[]
 }
 
-// Crea un nuevo modelo para las imágenes de la donación
 model DonationImage {
   id         Int      @id @default(autoincrement())
   imageUrl   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   donationId Int
-  donation   Donation @relation(fields: [donationId], references: [id]) // Relación con Donation
+  donation   Donation @relation(fields: [donationId], references: [id])
 }
 
-// Renombramos DonatedItem a DonationTransaction para mayor claridad
 model DonationTransaction {
   id Int @id @default(autoincrement())
 
-  status     TransactionStatus @default(Reserved)
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
-  // La donación que se está reservando/donando
-  donation   Donation          @relation(fields: [donationId], references: [id])
-  donationId Int               @unique
-  // El usuario que está reservando/recibiendo la donación
-  receiver   User              @relation("ReceivedBy", fields: [receiverId], references: [id])
+  status    TransactionStatus @default(Reserved)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  donation   Donation @relation(fields: [donationId], references: [id])
+  donationId Int      @unique
+
+  receiver   User @relation("ReceivedBy", fields: [receiverId], references: [id])
   receiverId Int
 }
 
 enum TransactionStatus {
-  Reserved // El usuario ha reservado el artículo
-  Donated // El donador ha marcado el artículo como entregado
+  Reserved
+  Donated
 }
 
 model Category {
   id          Int        @id @default(autoincrement())
-  name        String
+  title       String     @unique
   description String?
+  icon        String
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   donations   Donation[]

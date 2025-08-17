@@ -1,0 +1,43 @@
+
+
+
+
+
+### GET /categories
+
+
+GET http://localhost:3002/api/v1/categories
+Accept: application/json
+
+### GET /categories/:id
+
+
+GET http://localhost:3002/api/v1/categories/1
+Accept: application/json
+
+
+### POST /categories
+
+POST http://localhost:3002/api/v1/categories
+Content-Type: application/json
+
+{
+  "title": "Books",
+  "description": "Books for donation",
+  "icon": "Book"
+}
+
+### PUT /categories/:id
+
+PUT http://localhost:3002/api/v1/categories/3
+Content-Type: application/json
+
+{
+  "id": 3,
+  "icon": "Book"
+}
+
+### DELETE /categories/:id
+
+DELETE http://localhost:3002/api/v1/categories/1
+Accept: application/json

@@ -5,7 +5,7 @@ export class UpdateCategoryDto {
   id!: number;
 
   @IsString()
-  name!: string;
+  title!: string;
 
   @IsString()
   description!: string;
