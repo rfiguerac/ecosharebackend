@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import { errorHandler } from "./errors/errorHandler";
 
 interface Options {
   routes: Router;
@@ -25,6 +26,8 @@ export class Server {
 
     //* Router
     this.app.use(this.routes);
+
+    this.app.use(errorHandler);
 
     this.app.listen(this.port, () => {
       console.log(`Server running on port ${this.port}`);

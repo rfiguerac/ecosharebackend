@@ -5,6 +5,7 @@ import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from "../../domain";
+import { HttpException } from "../../presentation/errors/HttpException";
 
 export class CategoryDataSourceImpl extends CategoryDataSource {
   async create(dto: CreateCategoryDto): Promise<Category> {
@@ -12,6 +13,7 @@ export class CategoryDataSourceImpl extends CategoryDataSource {
       data: {
         title: dto.title,
         description: dto.description,
+        icon: dto.icon,
       },
     });
 
@@ -22,6 +24,9 @@ export class CategoryDataSourceImpl extends CategoryDataSource {
     const category = await prisma.category.findUnique({
       where: { id },
     });
+    if (!category) {
+      throw new HttpException(404, "Category not found");
+    }
 
     return Category.fromObject(category);
   }
@@ -31,12 +36,14 @@ export class CategoryDataSourceImpl extends CategoryDataSource {
     return categories.map(Category.fromObject);
   }
 
-  async update(dto: UpdateCategoryDto): Promise<Category> {
+  async update(id: number, dto: UpdateCategoryDto): Promise<Category> {
+    await this.findById(id);
     const category = await prisma.category.update({
-      where: { id: dto.id },
+      where: { id: id },
       data: {
         title: dto.title,
         description: dto.description,
+        icon: dto.icon,
       },
     });
 
@@ -44,6 +51,7 @@ export class CategoryDataSourceImpl extends CategoryDataSource {
   }
 
   async deleteById(id: number): Promise<Category> {
+    await this.findById(id);
     const category = await prisma.category.delete({
       where: { id },
     });

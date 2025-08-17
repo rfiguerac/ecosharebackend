@@ -21,8 +21,8 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     return this.dataSource.findAll();
   }
 
-  update(dto: UpdateCategoryDto): Promise<Category> {
-    return this.dataSource.update(dto);
+  update(id: number, dto: UpdateCategoryDto): Promise<Category> {
+    return this.dataSource.update(id, dto);
   }
 
   deleteById(id: number): Promise<Category> {

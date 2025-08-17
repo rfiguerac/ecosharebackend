@@ -12,7 +12,7 @@ Accept: application/json
 ### GET /categories/:id
 
 
-GET http://localhost:3002/api/v1/categories/1
+GET http://localhost:3002/api/v1/categories/9
 Accept: application/json
 
 
@@ -33,11 +33,10 @@ PUT http://localhost:3002/api/v1/categories/3
 Content-Type: application/json
 
 {
-  "id": 3,
   "icon": "Book"
 }
 
 ### DELETE /categories/:id
 
-DELETE http://localhost:3002/api/v1/categories/1
+DELETE http://localhost:3002/api/v1/categories/4
 Accept: application/json

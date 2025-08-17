@@ -54,7 +54,7 @@ export class CategoryController {
       const id = Number(req.params.id);
       const category = await new UpdateCategory(
         this.categoryRepository
-      ).execute(req.body);
+      ).execute(id, req.body);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
@@ -67,13 +67,10 @@ export class CategoryController {
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = Number(req.params.id);
-      const result = await new DeleteCategory(this.categoryRepository).execute(
-        id
-      );
-      if (!result) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-      res.status(204).send();
+      const category = await new DeleteCategory(
+        this.categoryRepository
+      ).execute(id);
+      res.status(200).send(category);
     } catch (error) {
       next(error);
     }
