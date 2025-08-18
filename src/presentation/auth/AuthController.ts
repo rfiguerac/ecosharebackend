@@ -1,0 +1,25 @@
+import { Request, Response } from "express";
+import { AuthRepository } from "../../domain";
+
+export class AuthController {
+  constructor(private readonly authRepository: AuthRepository) {}
+
+  login = (req: Request, res: Response) => {
+    res.status(200).json({ message: "Login successful" });
+  };
+  register = (req: Request, res: Response) => {
+    res.status(201).json({ message: "Registration successful" });
+  };
+  logout = (req: Request, res: Response) => {
+    res.status(200).json({ message: "Logout successful" });
+  };
+  refresh = (req: Request, res: Response) => {
+    res.status(200).json({ message: "Token refreshed successfully" });
+  };
+  updateProfile = (req: Request, res: Response) => {
+    res.status(200).json({ message: "Profile updated successfully" });
+  };
+  changePassword = (req: Request, res: Response) => {
+    res.status(200).json({ message: "Password changed successfully" });
+  };
+}
