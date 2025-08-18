@@ -5,6 +5,8 @@ import {
   DonationRepository,
   UpdateDonationDto,
 } from "../../domain";
+import { PaginationDto } from "../../domain/dtos/shared/PaginationDto";
+import { PaginationResponse } from "../../domain/dtos/shared/PaginationResponse";
 
 export class DonationRepositoryImpl implements DonationRepository {
   constructor(private readonly datasource: DonationDataSource) {}
@@ -20,12 +22,17 @@ export class DonationRepositoryImpl implements DonationRepository {
     return this.datasource.findById(id);
   };
 
-  getAll = async (): Promise<Donation[]> => {
-    return this.datasource.findAll();
+  getAll = async (
+    paginationDto: PaginationDto
+  ): Promise<PaginationResponse<Donation>> => {
+    return this.datasource.findAll(paginationDto);
   };
 
-  updateById = async (dto: UpdateDonationDto): Promise<Donation> => {
-    return this.datasource.update(dto);
+  updateById = async (
+    id: number,
+    dto: UpdateDonationDto
+  ): Promise<Donation> => {
+    return this.datasource.update(id, dto);
   };
 
   deleteById = async (id: number): Promise<Donation> => {

@@ -5,7 +5,7 @@ import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from "../../domain";
-import { HttpException } from "../../presentation/errors/HttpException";
+import { HttpException } from "../../presentation/errors/httpException";
 
 export class CategoryDataSourceImpl extends CategoryDataSource {
   async create(dto: CreateCategoryDto): Promise<Category> {

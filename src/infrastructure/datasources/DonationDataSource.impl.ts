@@ -5,7 +5,9 @@ import {
 } from "../../domain";
 import { DonationDataSource } from "../../domain/dataSource";
 import { prisma } from "../../data/posgresql";
-import { HttpException } from "../../presentation/errors/HttpException";
+import { HttpException } from "../../presentation/errors/httpException";
+import { PaginationDto } from "../../domain/dtos/shared/PaginationDto";
+import { PaginationResponse } from "../../domain/dtos/shared/PaginationResponse";
 
 export class DonationDataSourceImpl implements DonationDataSource {
   // Crear una donación
@@ -55,14 +57,37 @@ export class DonationDataSourceImpl implements DonationDataSource {
   }
 
   // Listar todas las donaciones
-  async findAll(): Promise<DonationEntity[]> {
-    // Corrección: Se incluye el array de imágenes en la lista
+  async findAll(
+    paginationDto: PaginationDto
+  ): Promise<PaginationResponse<DonationEntity>> {
+    const totalDonations = await prisma.donation.count();
+
     const donations = await prisma.donation.findMany({
       include: { images: true },
+      skip: (paginationDto.page - 1) * paginationDto.limit,
+      take: paginationDto.limit,
     });
-    return donations.map((donation) => {
-      return DonationEntity.fromObject(donation);
-    });
+    const totalPages = Math.ceil(totalDonations / paginationDto.limit);
+
+    return {
+      data: donations.map((donation) => DonationEntity.fromObject(donation)),
+      next:
+        paginationDto.page < totalPages
+          ? `/donations?page=${paginationDto.page + 1}&limit=${
+              paginationDto.limit
+            }`
+          : null,
+      previous:
+        paginationDto.page > 1
+          ? `/donations?page=${paginationDto.page - 1}&limit=${
+              paginationDto.limit
+            }`
+          : null,
+      page: paginationDto.page,
+      limit: paginationDto.limit,
+      total: totalDonations,
+      totalPages: totalPages,
+    };
   }
 
   // Actualizar una donación

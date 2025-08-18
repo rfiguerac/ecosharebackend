@@ -80,8 +80,11 @@ export class DonationController {
     try {
       const donations = await new ListDonations(
         this.donationRepository
-      ).execute();
-      res.json(donations.map((donation) => donation.toResponse()));
+      ).execute({
+        page: Number(req.query.page) || 1,
+        limit: Number(req.query.limit) || 10,
+      });
+      res.json(donations);
     } catch (err) {
       next(err);
     }
@@ -90,7 +93,7 @@ export class DonationController {
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const updateDonationDto = plainToInstance(UpdateDonationDto, req.body);
-      updateDonationDto.id = Number(req.params.id);
+      const id = Number(req.params.id);
       const errors = await validate(updateDonationDto);
       if (errors.length > 0) {
         const messages = errors.flatMap((error) =>
@@ -101,7 +104,7 @@ export class DonationController {
 
       const donation = await new UpdateDonation(
         this.donationRepository
-      ).execute(updateDonationDto);
+      ).execute(id, updateDonationDto);
       res.json(donation.toResponse());
     } catch (err) {
       next(err);
