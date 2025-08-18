@@ -5,10 +5,8 @@ import {
   DonationDataSourceImpl,
   DonationRepositoryImpl,
 } from "../../infrastructure";
-import multer from "multer";
 
-//  Multer solo almacena en memoria
-const upload = multer({ storage: multer.memoryStorage() });
+import { FileUploadMiddleware } from "../../middleware/file-upload.middleware";
 
 export class DonationRouter {
   static router(): Router {
@@ -21,7 +19,7 @@ export class DonationRouter {
 
     router.post(
       "/",
-      upload.array("images", 5), // Multer procesa la subida de archivos en memoria
+      FileUploadMiddleware.containFiles,
       donationController.create
     );
 

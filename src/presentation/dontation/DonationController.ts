@@ -12,20 +12,14 @@ import {
 } from "../../domain";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
-import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { join } from "path";
+import { UploadMulti } from "../../domain/use-case/fileUpload/UploadMulti";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body);
     try {
-      const files = req.files as Express.Multer.File[];
-
-      if (!files || files.length === 0) {
-        return res.status(400).json({ error: "Image files are required." });
-      }
-
       // Paso 1: Validar los datos antes de guardar los archivos
       const createDonationDto = plainToInstance(CreateDonationDto, req.body);
       const errors = await validate(createDonationDto);
@@ -36,19 +30,11 @@ export class DonationController {
         return res.status(400).json({ errors: messages });
       }
 
-      // Paso 2: Si la validación pasa, guardar los archivos en el disco
-      const uploadDir = join(process.cwd(), "public/uploads/donations");
-      if (!existsSync(uploadDir)) {
-        mkdirSync(uploadDir, { recursive: true });
-      }
-
       const imageUrls: string[] = [];
-      files.forEach((file) => {
-        const fileName = `${Date.now()}-${file.originalname}`;
-        const filePath = join(uploadDir, fileName);
-        writeFileSync(filePath, file.buffer);
-        imageUrls.push(`/uploads/donations/${fileName}`);
-      });
+      const files = req.body.file;
+      // Subir imágenes
+      const uploadedFileNames = await UploadMulti.execute(files);
+      imageUrls.push(...uploadedFileNames);
 
       // Paso 3: Llamar al caso de uso para crear la donación en la BD
       const donation = await new CreateDonation(

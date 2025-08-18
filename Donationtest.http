@@ -2,7 +2,7 @@
 ### GET /donations
 
 
-GET http://localhost:3002/api/v1/donations
+GET http://localhost:3002/api/v1/donations?page=3&limit=2
 Accept: application/json
 
 ### GET /donations/:id

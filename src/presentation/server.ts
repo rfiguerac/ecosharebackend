@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { errorHandler } from "./errors/errorHandler";
+import fileUpload from "express-fileupload";
 
 interface Options {
   routes: Router;
@@ -20,6 +21,8 @@ export class Server {
   async start() {
     // Middleware
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } }));
 
     // public folder
     this.app.use(express.static("public"));

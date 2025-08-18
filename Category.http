@@ -6,7 +6,7 @@
 ### GET /categories
 
 
-GET http://localhost:3002/api/v1/categories?page=1&limit=2
+GET http://localhost:3002/api/v1/categories
 Accept: application/json
 
 ### GET /categories/:id
