@@ -1,4 +1,4 @@
-import { prisma } from "../../data/posgresql";
+import { prisma } from "../../data/postgresql";
 import {
   Category,
   CategoryDataSource,
