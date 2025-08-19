@@ -7,6 +7,8 @@ import { Uuid } from "../../../config/uuid.adapter";
 export class UploadSingleFile {
   private static checkFolder(folderPath: string) {
     if (!fs.existsSync(folderPath)) {
+      console.log(folderPath, "no existe, creando...");
+
       fs.mkdirSync(folderPath);
     }
   }
@@ -24,8 +26,11 @@ export class UploadSingleFile {
           `Invalid extension: ${fileExtension}, valid ones ${validExtensions}`
         );
       }
-
-      const destination = path.resolve(__dirname, "../../../Uploads/donation");
+      console.log(file);
+      const destination = path.resolve(
+        __dirname,
+        "../../../../public/uploads/donation"
+      );
       this.checkFolder(destination);
 
       const fileName = `${uuid()}.${fileExtension}`;

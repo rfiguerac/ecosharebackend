@@ -22,7 +22,7 @@ POST http://localhost:3002/api/v1/categories
 Content-Type: application/json
 
 {
-  "title": "Books",
+  "title": "",
   "description": "Books for donation",
   "icon": "Book"
 }

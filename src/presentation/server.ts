@@ -1,6 +1,7 @@
 import express, { Router } from "express";
-import { errorHandler } from "./errors/errorHandler";
+import cors from "cors";
 import fileUpload from "express-fileupload";
+import { errorHandler } from "./errors/errorHandler";
 
 interface Options {
   routes: Router;
@@ -19,12 +20,18 @@ export class Server {
   }
 
   async start() {
-    // Middleware
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } }));
+    //* Middlewares
+    this.app.use(cors());
+    this.app.use(express.json()); // raw
+    this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
+    this.app.use(
+      fileUpload({
+        limits: { fileSize: 50 * 1024 * 1024 },
+      })
+    );
 
-    // public folder
+    //* Public Folder
+
     this.app.use(express.static("public"));
 
     //* Router

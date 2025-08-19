@@ -13,14 +13,14 @@ import {
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
 import { UploadMulti } from "../../domain/use-case/fileUpload/UploadMulti";
+import { UploadedFile } from "express-fileupload";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body);
     try {
-      // Paso 1: Validar los datos antes de guardar los archivos
+      // Paso 1: Validar los datos del DTO
       const createDonationDto = plainToInstance(CreateDonationDto, req.body);
       const errors = await validate(createDonationDto);
       if (errors.length > 0) {
@@ -30,11 +30,12 @@ export class DonationController {
         return res.status(400).json({ errors: messages });
       }
 
-      const imageUrls: string[] = [];
-      const files = req.body.file;
+      // Paso 2: Acceder a los archivos desde req.body.files, según el middleware
+      const files = req.body.files as UploadedFile[];
+
       // Subir imágenes
       const uploadedFileNames = await UploadMulti.execute(files);
-      imageUrls.push(...uploadedFileNames);
+      const imageUrls: string[] = uploadedFileNames;
 
       // Paso 3: Llamar al caso de uso para crear la donación en la BD
       const donation = await new CreateDonation(
