@@ -1,4 +1,4 @@
-import { DonationRepository } from "../../../domain";
+import { DonationRepository } from "../..";
 import { Donation } from "../../entities";
 
 export class GetDonation {

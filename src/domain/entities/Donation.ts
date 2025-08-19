@@ -17,9 +17,9 @@ export class Donation {
     public latitude: number,
     public longitude: number,
     public expiryDate: Date | null,
-    public createdAt: Date,
-    public updatedAt: Date,
-    public urgency: boolean
+    public urgency: boolean,
+    public createdAt?: Date,
+    public updatedAt?: Date,
   ) {
     this.validate();
   }

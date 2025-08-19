@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { AuthRepository } from "../../domain";
+import { UserRepository } from "../../domain";
 
-export class AuthController {
-  constructor(private readonly authRepository: AuthRepository) {}
+export class UserController {
+  constructor(private readonly userRepository: UserRepository) {}
 
   login = (req: Request, res: Response) => {
     res.status(200).json({ message: "Login successful" });

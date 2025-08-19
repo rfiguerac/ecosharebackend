@@ -4,7 +4,7 @@ import {
   UpdateDonationDto,
 } from "../../domain";
 import { DonationDataSource } from "../../domain/dataSource";
-import { prisma } from "../../data/posgresql";
+import { prisma } from "../../data/postgresql";
 import { HttpException } from "../../presentation/errors/httpException";
 import { PaginationDto } from "../../domain/dtos/shared/PaginationDto";
 import { PaginationResponse } from "../../domain/dtos/shared/PaginationResponse";
