@@ -29,11 +29,13 @@ Content-Type: application/json
 
 ### PUT /categories/:id
 
-PUT http://localhost:3002/api/v1/categories/3
+PUT http://localhost:3002/api/v1/categories/6
 Content-Type: application/json
 
 {
-  "icon": "Book"
+  "title": "furniture",
+  "description": "furniture for donation",
+  "icon": "Bed"
 }
 
 ### DELETE /categories/:id
