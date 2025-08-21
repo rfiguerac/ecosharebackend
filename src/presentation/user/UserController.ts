@@ -1,25 +1,82 @@
 import { Request, Response } from "express";
-import { UserRepository } from "../../domain";
+import { 
+  UserRepository,
+  LoginUser,
+  RegisterUser,
+  LogoutUser,
+  RefreshTokenUser,
+  UpdateUser,
+  ChangePasswordUser,
+  UserToken,
+  DeleteUser
+} from "../../domain";
+import { log } from "console";
 
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
 
-  login = (req: Request, res: Response) => {
-    res.status(200).json({ message: "Login successful" });
+  login = async (req: Request, res: Response) => {
+    try {
+      const user = await new LoginUser(this.userRepository).execute(req.body);
+      res.status(200).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
-  register = (req: Request, res: Response) => {
-    res.status(201).json({ message: "Registration successful" });
+
+  register = async (req: Request, res: Response) => {
+    try {
+      const user = await new RegisterUser(this.userRepository).execute(req.body);
+      res.status(201).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
-  logout = (req: Request, res: Response) => {
-    res.status(200).json({ message: "Logout successful" });
+
+  logout = async (req: Request, res: Response) => {
+    try {
+      await new LogoutUser(this.userRepository).execute(req.body);
+      res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
-  refresh = (req: Request, res: Response) => {
-    res.status(200).json({ message: "Token refreshed successfully" });
+
+  refresh = async (req: Request, res: Response) => {
+    try {
+      const token = await new RefreshTokenUser(this.userRepository).execute(req.body);
+      res.status(200).json(token.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
-  updateProfile = (req: Request, res: Response) => {
-    res.status(200).json({ message: "Profile updated successfully" });
+
+  updateUser = async (req: Request, res: Response) => {
+    try {
+      const token = req.body.token;
+      const user = await new UpdateUser(this.userRepository).execute(token, req.body);
+      res.status(200).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
-  changePassword = (req: Request, res: Response) => {
-    res.status(200).json({ message: "Password changed successfully" });
+
+  deleteUser = async (req: Request, res: Response) => {
+    try {
+      const token = req.body.token;
+      const user = await new DeleteUser(this.userRepository).execute(token);
+      res.status(200).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  changePassword = async (req: Request, res: Response) => {
+    try {
+      const user = await new ChangePasswordUser(this.userRepository).execute(req.body);
+      res.status(200).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   };
 }

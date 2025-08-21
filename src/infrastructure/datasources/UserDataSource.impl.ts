@@ -11,6 +11,7 @@ import {
   UpdateUserDto,
   TokenUserDto,
   ChangePasswordUserDto,
+  RefreshTokenUser,
 } from "../../domain";
 
 export class UserDataSourceImpl implements UserDataSource {
@@ -47,7 +48,7 @@ export class UserDataSourceImpl implements UserDataSource {
       where: { token: dto.token },
     });
   }
-  async refreshToken(dto: TokenUserDto): Promise<TokenUserDto> {
+  async refreshToken(dto: TokenUserDto): Promise<UserToken> {
     const userToken = await prisma.userToken.findUnique({
       where: { token: dto.token },
       include: { user: true },
