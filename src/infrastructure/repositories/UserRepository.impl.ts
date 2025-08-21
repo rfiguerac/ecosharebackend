@@ -1,10 +1,10 @@
 import {
-  UserRepository,
   LoginUserDto,
   RegisterUserDto,
   UpdateUserDto,
   TokenUserDto,
   ChangePasswordUserDto,
+  UserRepository,
   UserDataSource,
   User,
 } from "../../domain";
@@ -13,29 +13,29 @@ export class UserRepositoryImpl implements UserRepository {
   constructor(private dataSource: UserDataSource) {}
 
   async login(dto: LoginUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+    return this.dataSource.login(dto);
   }
 
   async register(dto: RegisterUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+    return this.dataSource.register(dto);
   }
 
-  async logout(token: TokenUserDto): Promise<void> {
-    throw new Error("Method not implemented.");
+  async logout(dto: TokenUserDto): Promise<void> {
+    return this.dataSource.logout(dto);
   }
 
-  async refreshToken(token: TokenUserDto): Promise<TokenUserDto> {
-    throw new Error("Method not implemented.");
+  async refreshToken(dto: TokenUserDto): Promise<TokenUserDto> {
+    return this.dataSource.refreshToken(dto);
   }
-  async updateProfile(token: TokenUserDto, dto: UpdateUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
-
-  async changePassword(changePasswordUserDto: ChangePasswordUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+  async updateProfile(tokenDto: TokenUserDto, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.dataSource.updateProfile(tokenDto, updateUserDto);
   }
 
-  async deleteAccount(token: TokenUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+  async changePassword(dto: ChangePasswordUserDto): Promise<User> {
+    return this.dataSource.changePassword(dto);
+  }
+
+  async deleteAccount(dto: TokenUserDto): Promise<User> {
+    return this.dataSource.deleteAccount(dto);
   }
 }
