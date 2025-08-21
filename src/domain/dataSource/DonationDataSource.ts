@@ -5,10 +5,7 @@ import { PaginationResponse } from "../dtos/shared/PaginationResponse";
 import { Donation } from "../entities";
 
 export abstract class DonationDataSource {
-  abstract create(
-    dto: CreateDonationDto,
-    imageUrls: string[]
-  ): Promise<Donation>;
+  abstract create(dto: CreateDonationDto): Promise<Donation>;
   abstract findById(id: number): Promise<Donation>;
   abstract findAll(
     paginationDto: PaginationDto

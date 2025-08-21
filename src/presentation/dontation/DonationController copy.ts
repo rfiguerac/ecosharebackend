@@ -20,10 +20,28 @@ export class DonationController {
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = req.body;
+      // Paso 1: Validar los datos del DTO
+      const createDonationDto = plainToInstance(CreateDonationDto, req.body);
+      const errors = await validate(createDonationDto);
+      if (errors.length > 0) {
+        const messages = errors.flatMap((error) =>
+          Object.values(error.constraints || {})
+        );
+        return res.status(400).json({ errors: messages });
+      }
+
+      // Paso 2: Acceder a los archivos desde req.body.files, según el middleware
+      const files = req.body.files as UploadedFile[];
+
+      // Subir imágenes
+      const uploadedFileNames = await UploadMulti.execute(files);
+      const imageUrls: string[] = uploadedFileNames;
+
+      // Paso 3: Llamar al caso de uso para crear la donación en la BD
       const donation = await new CreateDonation(
         this.donationRepository
-      ).execute(data);
+      ).execute(createDonationDto, imageUrls);
+
       res.status(201).json(donation.toResponse());
     } catch (err) {
       next(err);

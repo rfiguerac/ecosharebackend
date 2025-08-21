@@ -6,10 +6,7 @@ import { CreateDonationDto } from "../../dtos";
 
 export class CreateDonation {
   constructor(private repo: DonationRepository) {}
-  async execute(
-    dto: CreateDonationDto,
-    imageUrls: string[] // Corrección: Se añade este parámetro
-  ): Promise<Donation> {
-    return this.repo.create(dto, imageUrls);
+  async execute(dto: CreateDonationDto): Promise<Donation> {
+    return this.repo.create(dto);
   }
 }
