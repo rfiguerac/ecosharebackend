@@ -7,6 +7,7 @@ import {
   UserRepository,
   UserDataSource,
   User,
+  UserToken,
 } from "../../domain";
 
 export class UserRepositoryImpl implements UserRepository {
@@ -24,7 +25,7 @@ export class UserRepositoryImpl implements UserRepository {
     return this.dataSource.logout(dto);
   }
 
-  async refreshToken(dto: TokenUserDto): Promise<TokenUserDto> {
+  async refreshToken(dto: TokenUserDto): Promise<UserToken> {
     return this.dataSource.refreshToken(dto);
   }
   async updateProfile(tokenDto: TokenUserDto, updateUserDto: UpdateUserDto): Promise<User> {
