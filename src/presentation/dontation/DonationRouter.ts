@@ -1,12 +1,8 @@
 import { Router } from "express";
 import { DonationController } from "./DonationController";
 import { DonationRepository } from "../../domain";
-import {
-  DonationDataSourceImpl,
-  DonationRepositoryImpl,
-} from "../../infrastructure";
-
-import { FileUploadMiddleware } from "../../middleware/file-upload.middleware";
+import { DonationDataSourceImpl, DonationRepositoryImpl } from "../../infrastructure";
+import { FileUploadMiddleware, AuthMiddleware } from "../../middleware";
 
 export class DonationRouter {
   static router(): Router {
@@ -20,13 +16,14 @@ export class DonationRouter {
     router.post(
       "/",
       FileUploadMiddleware.containFiles,
+      AuthMiddleware.validateJWT,
       donationController.create
     );
 
     router.get("/:id", donationController.getById);
     router.get("/", donationController.list);
-    router.put("/:id", donationController.update);
-    router.delete("/:id", donationController.delete);
+    router.put("/:id", AuthMiddleware.validateJWT, donationController.update);
+    router.delete("/:id",  AuthMiddleware.validateJWT, donationController.delete);
 
     return router;
   }
