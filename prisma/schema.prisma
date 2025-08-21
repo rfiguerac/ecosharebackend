@@ -36,6 +36,17 @@ model User {
   // Relaciones para la reputación
   reviewsReceived UserReputation[]      @relation("ReviewedUser")
   reviewsGiven    UserReputation[]      @relation("ReviewingUser")
+  tokenId         String?
+  token           UserToken?
+}
+
+model UserToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum UserRole {

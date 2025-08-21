@@ -1,6 +1,10 @@
 import { prisma } from "../../data/postgresql";
+import { HttpException } from "../../presentation/errors/httpException";
+import { JwtAdapter } from "../../config/jwt.adapter";
+import { bcryptAdapter } from "../../config/bcrypt.adapter";
 import {
   User,
+  UserToken,
   UserDataSource,
   LoginUserDto,
   RegisterUserDto,
@@ -8,28 +12,108 @@ import {
   TokenUserDto,
   ChangePasswordUserDto,
 } from "../../domain";
-import { HttpException } from "../../presentation/errors/httpException";
 
 export class UserDataSourceImpl implements UserDataSource {
   async login(dto: LoginUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+    const user = await prisma.user.findFirst({
+      where: { email: dto.email, password: dto.password },
+    });
+    if (!user) {
+      throw new HttpException(404, "User not found");
+    }
+
+    const isValid = bcryptAdapter.compare(dto.password, user.password);
+    if (!isValid) {
+      throw new HttpException(401, "Invalid credentials");
+    }
+    return User.fromObject(user);
   }
-  register(dto: RegisterUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+
+  async register(dto: RegisterUserDto): Promise<User> {
+    const hashedPassword = bcryptAdapter.hash(dto.password);
+    const user = await prisma.user.create({
+      data: {
+        email: dto.email,
+        name: dto.name,
+        password: hashedPassword,
+        role: dto.role,
+      },
+    });
+    return User.fromObject(user);
   }
-  logout(token: TokenUserDto): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async logout(dto: TokenUserDto): Promise<void> {
+    await prisma.userToken.delete({
+      where: { token: dto.token },
+    });
   }
-  refreshToken(token: TokenUserDto): Promise<TokenUserDto> {
-    throw new Error("Method not implemented.");
+  async refreshToken(dto: TokenUserDto): Promise<TokenUserDto> {
+    const userToken = await prisma.userToken.findUnique({
+      where: { token: dto.token },
+      include: { user: true },
+    });
+
+    if (!userToken) {
+      throw new HttpException(404, "Token not found");
+    }
+
+    const { id, email } = userToken.user;
+    const newToken = await JwtAdapter.generateToken({ id , email });
+    return UserToken.fromObject(newToken);
   }
-  deleteAccount(token: TokenUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+
+  async deleteAccount(dto: TokenUserDto): Promise<User> {
+    const userToken = await prisma.userToken.findUnique({
+      where: { token: dto.token },
+      include: { user: true },
+    });
+
+    if (!userToken) {
+      throw new HttpException(404, "Token not found");
+    }
+
+    const user = userToken.user;
+    await prisma.user.delete({ where: { id: user.id } });
+    return User.fromObject(user);
   }
-  updateProfile(token: TokenUserDto, dto: UpdateUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+  async updateProfile(tokenDto: TokenUserDto, updateUserDto: UpdateUserDto): Promise<User> {
+    const userToken = await prisma.userToken.findUnique({
+      where: { token: tokenDto.token },
+      include: { user: true },
+    });
+
+    if (!userToken) {
+      throw new HttpException(404, "Token not found");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userToken.user.id },
+      data: {
+        name: updateUserDto.name,
+        email: updateUserDto.email,
+      },
+    });
+    return User.fromObject(updatedUser);
   }
-  changePassword(changePasswordUserDto: ChangePasswordUserDto): Promise<User> {
-    throw new Error("Method not implemented.");
+
+
+  async changePassword(dto: ChangePasswordUserDto): Promise<User> {
+    const userToken = await prisma.userToken.findUnique({
+      where: { token: dto.token },
+      include: { user: true },
+    });
+
+    if (!userToken) {
+      throw new HttpException(404, "User not found");
+    }
+
+    const user = userToken.user;
+    const hashedPassword = bcryptAdapter.hash(dto.newPassword);
+
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+    return User.fromObject(updatedUser);
   }
 }
