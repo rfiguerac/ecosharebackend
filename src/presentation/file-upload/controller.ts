@@ -22,7 +22,7 @@ export class FileUploadController {
     const uploadedFileNames = await UploadMulti.execute(files);
     const imageUrls: string[] = uploadedFileNames;
 
-    const donationId = Number(req.params.donationId);
+    const donationId = Number(req.params.id);
     const imgDataSource = new ImagesDonationDataSourceImpl();
     const imdRepo = new ImagesDonationRepositoryImpl(imgDataSource);
     const addImagesDonation = new AddImagesDonation(imdRepo);

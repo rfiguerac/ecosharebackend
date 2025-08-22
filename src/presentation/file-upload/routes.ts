@@ -10,7 +10,7 @@ export class FileUploadRoutes {
     router.use(FileUploadMiddleware.containFiles);
 
     //router.post( '/single/:type', controller.uploadFile );
-    router.post("/upload:id", controller.uploadMultipleFiles);
+    router.post("/upload/:id", controller.uploadMultipleFiles);
 
     return router;
   }

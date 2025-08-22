@@ -14,6 +14,11 @@ export class FileUploadMiddleware {
       files = Object.values(req.files).flat() as UploadedFile[];
     }
 
+    // Inicializamos req.body si es undefined
+    if (!req.body) {
+      req.body = {};
+    }
+
     // Ahora `req.body.files` contiene un array de archivos
     req.body.files = files;
 
