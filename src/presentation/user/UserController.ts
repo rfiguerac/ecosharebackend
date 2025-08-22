@@ -7,10 +7,8 @@ import {
   RefreshTokenUser,
   UpdateUser,
   ChangePasswordUser,
-  UserToken,
   DeleteUser
 } from "../../domain";
-import { log } from "console";
 
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
