@@ -2,6 +2,8 @@ import express, { Router } from "express";
 import cors from "cors";
 import fileUpload from "express-fileupload";
 import { errorHandler } from "./errors/errorHandler";
+import { setupSocketServer } from "./socketServer";
+import { Server as HttpServer } from "http";
 
 interface Options {
   routes: Router;
@@ -10,6 +12,7 @@ interface Options {
 
 export class Server {
   private app = express();
+  private httpServer: HttpServer = new HttpServer(this.app);
   private routes: Router;
   private readonly port: number;
 
@@ -20,6 +23,9 @@ export class Server {
   }
 
   async start() {
+    //* Socket Server
+    const io = setupSocketServer(this.httpServer);
+
     //* Middlewares
     this.app.use(cors());
     this.app.use(express.json()); // raw

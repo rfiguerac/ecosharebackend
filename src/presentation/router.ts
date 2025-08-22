@@ -2,6 +2,7 @@ import { Router } from "express";
 import { DonationRouter } from "./dontation/DonationRouter";
 import { CategoryRouter } from "./category/CategoryRouter";
 import { UserRouter } from "./user/UserRouter";
+import { ChatRouter } from "./chat/ChatRouter";
 import { AuthMiddleware } from "../middleware";
 
 export class AppRouter {
@@ -11,7 +12,8 @@ export class AppRouter {
     router.use("/api/v1/donations", DonationRouter.router());
     router.use("/api/v1/categories", CategoryRouter.router());
     router.use("/api/v1/users", AuthMiddleware.validateJWT, UserRouter.router());
-    
+    router.use("/api/v1/chats", ChatRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
+
     return router;
   }
 }
