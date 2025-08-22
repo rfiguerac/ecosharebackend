@@ -17,8 +17,9 @@ import {
 export class UserDataSourceImpl implements UserDataSource {
   async login(dto: LoginUserDto): Promise<User> {
     const user = await prisma.user.findFirst({
-      where: { email: dto.email, password: dto.password },
+      where: { email: dto.email },
     });
+
     if (!user) {
       throw new HttpException(404, "User not found");
     }
@@ -27,7 +28,19 @@ export class UserDataSourceImpl implements UserDataSource {
     if (!isValid) {
       throw new HttpException(401, "Invalid credentials");
     }
-    return User.fromObject(user);
+    const token = await JwtAdapter.generateToken({ id: user.id });
+    if (!token) throw new HttpException(500, "Error generating token");
+
+    // Crea el token de refresco y lo guarda en la base de datos
+    const refreshToken = await JwtAdapter.generateToken({ id: user.id }, "7d");
+    if (!refreshToken)
+      throw new HttpException(500, "Error generating refresh token");
+
+    const userWithTokens = User.fromObject(user);
+    userWithTokens.accessToken = token;
+    userWithTokens.refreshToken = refreshToken;
+
+    return userWithTokens;
   }
 
   async register(dto: RegisterUserDto): Promise<User> {
