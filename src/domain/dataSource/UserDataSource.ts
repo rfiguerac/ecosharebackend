@@ -1,4 +1,12 @@
-import { LoginUserDto, RegisterUserDto, UpdateUserDto, TokenUserDto, ChangePasswordUserDto, User, UserToken } from "..";
+import {
+  LoginUserDto,
+  RegisterUserDto,
+  UpdateUserDto,
+  TokenUserDto,
+  ChangePasswordUserDto,
+  User,
+  UserToken,
+} from "..";
 
 export abstract class UserDataSource {
   abstract login(dto: LoginUserDto): Promise<User>;
@@ -6,6 +14,12 @@ export abstract class UserDataSource {
   abstract logout(token: TokenUserDto): Promise<void>;
   abstract refreshToken(token: TokenUserDto): Promise<UserToken>;
   abstract deleteAccount(token: TokenUserDto): Promise<User>;
-  abstract updateProfile(token: TokenUserDto, dto: UpdateUserDto): Promise<User>;
-  abstract changePassword(changePasswordUserDto: ChangePasswordUserDto): Promise<User>;
+  abstract updateProfile(
+    token: TokenUserDto,
+    dto: UpdateUserDto
+  ): Promise<User>;
+  abstract changePassword(
+    changePasswordUserDto: ChangePasswordUserDto
+  ): Promise<User>;
+  abstract getById(id: number): Promise<User>;
 }

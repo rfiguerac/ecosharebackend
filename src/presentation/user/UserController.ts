@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { 
+import { NextFunction, Request, Response } from "express";
+import {
   UserRepository,
   LoginUser,
   RegisterUser,
@@ -7,7 +7,7 @@ import {
   RefreshTokenUser,
   UpdateUser,
   ChangePasswordUser,
-  DeleteUser
+  DeleteUser,
 } from "../../domain";
 
 export class UserController {
@@ -22,12 +22,23 @@ export class UserController {
     }
   };
 
-  register = async (req: Request, res: Response) => {
+  register = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await new RegisterUser(this.userRepository).execute(req.body);
+      const user = await new RegisterUser(this.userRepository).execute(
+        req.body
+      );
       res.status(201).json(user.toResponse());
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      next(error);
+    }
+  };
+  getProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.body.user.id; // Extrae el ID del usuario del payload JWT
+      const user = await this.userRepository.getById(userId);
+      res.status(200).json(user.toResponse());
+    } catch (error) {
+      next(error);
     }
   };
 
@@ -42,7 +53,9 @@ export class UserController {
 
   refresh = async (req: Request, res: Response) => {
     try {
-      const token = await new RefreshTokenUser(this.userRepository).execute(req.body);
+      const token = await new RefreshTokenUser(this.userRepository).execute(
+        req.body
+      );
       res.status(200).json(token.toResponse());
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -52,7 +65,10 @@ export class UserController {
   updateUser = async (req: Request, res: Response) => {
     try {
       const token = req.body.token;
-      const user = await new UpdateUser(this.userRepository).execute(token, req.body);
+      const user = await new UpdateUser(this.userRepository).execute(
+        token,
+        req.body
+      );
       res.status(200).json(user.toResponse());
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -71,7 +87,9 @@ export class UserController {
 
   changePassword = async (req: Request, res: Response) => {
     try {
-      const user = await new ChangePasswordUser(this.userRepository).execute(req.body);
+      const user = await new ChangePasswordUser(this.userRepository).execute(
+        req.body
+      );
       res.status(200).json(user.toResponse());
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });

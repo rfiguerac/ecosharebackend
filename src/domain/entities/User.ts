@@ -6,10 +6,12 @@ export class User {
     public email: string,
     public name: string,
     private password: string,
-    public role: UserRole,
+    public role: UserRole = "User",
     public tokenId?: number,
     public createdAt?: Date,
-    public updatedAt?: Date
+    public updatedAt?: Date,
+    public accessToken?: string, // Agregado
+    public refreshToken?: string // Agregado
   ) {}
 
   public static fromObject(userData: any): User {
@@ -21,21 +23,22 @@ export class User {
       userData.role,
       userData.tokenId,
       userData.createdAt,
-      userData.updatedAt
+      userData.updatedAt,
+      userData.accessToken, // Agregado
+      userData.refreshToken // Agregado
     );
   }
-  
+
   public toResponse() {
-    // Note: Password should not be included in the response for security reasons
     return {
       id: this.id,
       email: this.email,
       name: this.name,
       role: this.role,
-      tokenId: this.tokenId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      accessToken: this.accessToken, // Agregado
+      refreshToken: this.refreshToken, // Agregado
     };
   }
 }
-

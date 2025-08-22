@@ -11,6 +11,7 @@ import {
   UpdateUserDto,
   TokenUserDto,
   ChangePasswordUserDto,
+  RefreshTokenUser,
 } from "../../domain";
 
 export class UserDataSourceImpl implements UserDataSource {
@@ -30,6 +31,13 @@ export class UserDataSourceImpl implements UserDataSource {
   }
 
   async register(dto: RegisterUserDto): Promise<User> {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (existingUser) {
+      throw new HttpException(409, "User already exists");
+    }
+
     const hashedPassword = bcryptAdapter.hash(dto.password);
     const user = await prisma.user.create({
       data: {
@@ -39,6 +47,29 @@ export class UserDataSourceImpl implements UserDataSource {
         role: dto.role,
       },
     });
+
+    const token = await JwtAdapter.generateToken({ id: user.id });
+    if (!token) throw new HttpException(500, "Error generating token");
+
+    // Crea el token de refresco y lo guarda en la base de datos
+    const refreshToken = await JwtAdapter.generateToken({ id: user.id }, "7d");
+    if (!refreshToken)
+      throw new HttpException(500, "Error generating refresh token");
+
+    const userWithTokens = User.fromObject(user);
+    userWithTokens.accessToken = token;
+    userWithTokens.refreshToken = refreshToken;
+
+    return userWithTokens;
+  }
+
+  async getById(id: number): Promise<User> {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      throw new HttpException(404, "User not found");
+    }
     return User.fromObject(user);
   }
 
@@ -58,7 +89,7 @@ export class UserDataSourceImpl implements UserDataSource {
     }
 
     const { id, email } = userToken.user;
-    const newToken = await JwtAdapter.generateToken({ id , email });
+    const newToken = await JwtAdapter.generateToken({ id, email });
     return UserToken.fromObject(newToken);
   }
 
@@ -76,7 +107,10 @@ export class UserDataSourceImpl implements UserDataSource {
     await prisma.user.delete({ where: { id: user.id } });
     return User.fromObject(user);
   }
-  async updateProfile(tokenDto: TokenUserDto, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateProfile(
+    tokenDto: TokenUserDto,
+    updateUserDto: UpdateUserDto
+  ): Promise<User> {
     const userToken = await prisma.userToken.findUnique({
       where: { token: tokenDto.token },
       include: { user: true },
@@ -95,7 +129,6 @@ export class UserDataSourceImpl implements UserDataSource {
     });
     return User.fromObject(updatedUser);
   }
-
 
   async changePassword(dto: ChangePasswordUserDto): Promise<User> {
     const userToken = await prisma.userToken.findUnique({

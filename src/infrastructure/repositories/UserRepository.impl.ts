@@ -21,6 +21,10 @@ export class UserRepositoryImpl implements UserRepository {
     return this.dataSource.register(dto);
   }
 
+  async getById(id: number): Promise<User> {
+    return this.dataSource.getById(id);
+  }
+
   async logout(dto: TokenUserDto): Promise<void> {
     return this.dataSource.logout(dto);
   }
@@ -28,7 +32,10 @@ export class UserRepositoryImpl implements UserRepository {
   async refreshToken(dto: TokenUserDto): Promise<UserToken> {
     return this.dataSource.refreshToken(dto);
   }
-  async updateProfile(tokenDto: TokenUserDto, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateProfile(
+    tokenDto: TokenUserDto,
+    updateUserDto: UpdateUserDto
+  ): Promise<User> {
     return this.dataSource.updateProfile(tokenDto, updateUserDto);
   }
 

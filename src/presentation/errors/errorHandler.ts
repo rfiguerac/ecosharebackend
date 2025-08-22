@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { HttpException } from "./httpException";
 
 export function errorHandler(
   err: any,
@@ -6,7 +7,12 @@ export function errorHandler(
   res: Response,
   _next: NextFunction
 ) {
-  const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  res.status(status).json({ error: message });
+  // Comprueba si el error es una instancia de HttpException
+  if (err instanceof HttpException) {
+    return res.status(err.status).json({ message: err.message });
+  }
+
+  // Maneja otros errores no controlados
+  console.error(err);
+  res.status(500).json({ message: "Internal Server Error" });
 }
