@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ChatRepositoryImpl, ChatDataSourceImpl } from "../../infrastructure";
 import { ChatController } from "./ChatController";
 import { validateDto } from "../../middleware";
-import { CreateMessageDto } from "../../domain";
+import { SendMessageDto } from "../../domain";
 
 export class ChatRouter {
 	public static router(): Router {
@@ -12,7 +12,8 @@ export class ChatRouter {
 		const chatController = new ChatController(chatRepository);
 
 		router.get("/:id", chatController.getChatById);
-		router.post("/new-message", validateDto(CreateMessageDto), chatController.addMessage);
+		router.get("/my-chats", chatController.getAllChats);
+		// router.post("/new-message", validateDto(CreateMessageDto), chatController.addMessage);
 
 		return router;
 	}

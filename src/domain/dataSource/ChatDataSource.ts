@@ -1,6 +1,7 @@
-import { CreateMessageDto, Chat } from "..";
+import {  Chat } from "..";
 
 export abstract class ChatDataSource {
-    abstract getChatByUserId(chatId: number): Promise<Chat>;
-    abstract addMessage(dto: CreateMessageDto): Promise<void>;
+    abstract getAllChats(): Promise<Chat[]>;
+    abstract getChatById(chatId: number): Promise<Chat>;
+    // abstract addMessage(dto: CreateMessageDto): Promise<void>;
 }

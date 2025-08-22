@@ -7,4 +7,4 @@ export * from "./user/LoginUserDto";
 export * from "./user/UpdateUserDto";
 export * from "./user/TokenUserDto";
 export * from "./user/ChangePasswordUserDto";
-export * from "./chat/CreateMessageDto";
+export * from "./chat/SendMessageDto";

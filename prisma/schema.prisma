@@ -21,56 +21,85 @@ model UserReputation {
 }
 
 model User {
-  id              Int                   @id @default(autoincrement())
-  email           String                @unique
-  name            String?
-  password        String
-  role            UserRole              @default(User)
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-  donations       Donation[]            @relation("DonatedBy")
-  transactions    DonationTransaction[] @relation("ReceivedBy")
-  reviewsReceived UserReputation[]      @relation("ReviewedUser")
-  reviewsGiven    UserReputation[]      @relation("ReviewingUser")
-  tokenId         String?
-  token           UserToken?
-  messages        Chat[]
+  id                  Int                     @id @default(autoincrement())
+  email               String                  @unique
+  name                String?
+  password            String
+  role                UserRole                @default(User)
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+  donations           Donation[]              @relation("DonatedBy")
+  transactions        DonationTransaction[]   @relation("ReceivedBy")
+  reviewsReceived     UserReputation[]        @relation("ReviewedUser")
+  reviewsGiven        UserReputation[]        @relation("ReviewingUser")
+  tokenId             String?
+  token               UserToken?
+  chats               Chat[]
+  sentMessages        ChatMessage[]           @relation("sentBy")
+  receivedMessages    ChatMessage[]           @relation("receivedBy")
+  Reports             Reports[]               @relation("reportedBy")
 }
 
 model Chat {
-  id          Int      @id @default(autoincrement())
-  content     String
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  chatMessages    ChatMessage[]
+}
+
+model ChatMessage {
+  id              Int           @id @default(autoincrement())
+  message         String
+  chatId          Int
+  chat            Chat          @relation(fields: [chatId], references: [id])
+  senderId        Int
+  sender          User          @relation("sentBy", fields: [senderId], references: [id])
+  receiverId      Int
+  receiver        User          @relation("receivedBy", fields: [receiverId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Reports {
+  id              Int           @id @default(autoincrement())
+  description     String
+  reporterId      Int
+  reporter        User          @relation("reportedBy", fields: [reporterId], references: [id])
+  isReported      Boolean       @default(false)
+  donationId      Int
+  donation        Donation      @relation("donationBy", fields: [donationId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model UserToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+id               Int            @id @default(autoincrement())
+token            String         @unique
+userId           Int            @unique
+user             User           @relation(fields: [userId], references: [id])
+createdAt        DateTime       @default(now())
+updatedAt        DateTime       @updatedAt
 }
 
 model Donation {
-  id          Int                  @id @default(autoincrement())
-  title       String
-  description String
-  expiryDate  DateTime?
-  urgency     Boolean              @default(false)
-  createdAt   DateTime             @default(now())
-  updatedAt   DateTime             @updatedAt
-  donorId     Int
-  categoryId  Int
-  latitude    Float
-  longitude   Float
-  category    Category             @relation(fields: [categoryId], references: [id])
-  donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
-  images      DonationImage[]
-  transaction DonationTransaction?
+  id               Int                                   @id @default(autoincrement())
+  title            String
+  description      String
+  expiryDate       DateTime?
+  urgency          Boolean                               @default(false)
+  createdAt        DateTime                              @default(now())
+  updatedAt        DateTime                              @updatedAt
+  donorId          Int
+  categoryId       Int
+  latitude         Float
+  longitude        Float
+  category         Category                              @relation(fields: [categoryId], references: [id])
+  donor            User                                  @relation("DonatedBy", fields: [donorId], references: [id])
+  images           DonationImage[]
+  transaction      DonationTransaction?
+  Reports          Reports[] @relation("donationBy")
 }
 
 model DonationImage {

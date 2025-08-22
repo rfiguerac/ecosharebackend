@@ -19,4 +19,5 @@ export * from "./user/RefreshTokenUser";
 export * from "./user/ChangePasswordUser";
 
 export * from "./chat/GetChatById";
-export * from "./chat/AddMessage";
+export * from "./chat/GetAllChats";
+export * from "./chat/SendMessage";
