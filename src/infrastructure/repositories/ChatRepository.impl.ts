@@ -9,7 +9,7 @@ export class ChatRepositoryImpl implements ChatRepository {
 	constructor(private dataSource: ChatDataSource) {}
 
 	async getChatById(chatId: number): Promise<Chat> {
-		return this.dataSource.getChatById(chatId);
+		return this.dataSource.getChatByUserId(chatId);
 	}
 
 	async addMessage(dto: CreateMessageDto): Promise<void> {

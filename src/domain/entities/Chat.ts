@@ -2,7 +2,7 @@ export class Chat {
 	constructor(
 		public id: number,
 		public content: string,
-		public senderId: string,
+		public userId: string,
 		public createdAt?: Date,
 		public updatedAt?: Date
 	) {}
@@ -11,7 +11,7 @@ export class Chat {
 		return new Chat(
 			userData.id,
 			userData.content,
-			userData.senderId,
+			userData.userId,
 			userData.createdAt,
 			userData.updatedAt
 		);
@@ -21,7 +21,7 @@ export class Chat {
 		return {
 			id: this.id,
 			content: this.content,
-			senderId: this.senderId,
+			userId: this.userId,
 			createdAt: this.createdAt,
 			updatedAt: this.updatedAt,
 		};

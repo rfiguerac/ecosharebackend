@@ -40,8 +40,8 @@ model User {
 model Chat {
   id          Int      @id @default(autoincrement())
   content     String
-  senderId    Int
-  sender      User     @relation(fields: [senderId], references: [id])
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
