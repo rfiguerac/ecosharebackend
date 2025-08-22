@@ -16,17 +16,14 @@ export class CreateDonationDto {
   @IsString()
   description!: string;
 
-  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   latitude!: number;
 
-  @IsOptional()
   @Type(() => Number)
   @IsNumber()
   longitude!: number;
 
-  @IsOptional()
   @Type(() => Boolean)
   @IsBoolean()
   urgency!: boolean;

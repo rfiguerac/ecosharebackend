@@ -20,13 +20,12 @@ Content-Type: application/json
 {
   "title": "Donation Title",
   "description": "Donation Description",
+  "categoryId": 1,
   "donorId": 1,
-  "imageUrl": "http://example.com/image.jpg",
   "latitude": 12.345678,
   "longitude": 98.765432,
   "expiryDate": null,
-  "urgency": false,
-  "categoryId": 1
+  "urgency": false
 }
 
 ### PUT /donations/:id

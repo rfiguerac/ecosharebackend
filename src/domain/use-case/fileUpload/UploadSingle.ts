@@ -26,7 +26,7 @@ export class UploadSingleFile {
           `Invalid extension: ${fileExtension}, valid ones ${validExtensions}`
         );
       }
-      console.log(file);
+
       const destination = path.resolve(
         __dirname,
         "../../../../public/uploads/donation"

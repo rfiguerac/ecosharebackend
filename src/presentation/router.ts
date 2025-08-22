@@ -12,11 +12,7 @@ export class AppRouter {
 
     router.use("/api/v1/donations", DonationRouter.router());
     router.use("/api/v1/categories", CategoryRouter.router());
-    router.use(
-      "/api/v1/users",
-      AuthMiddleware.validateJWT,
-      UserRouter.router()
-    );
+    router.use("/api/v1/users", UserRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
     router.use("/api/v1/file", FileUploadRoutes.routes);
     router.use("/api/v1/chats", ChatRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
 

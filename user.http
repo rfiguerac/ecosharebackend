@@ -1,0 +1,22 @@
+### login
+
+POST http://localhost:3002/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "password"
+}
+
+
+### register
+
+POST http://localhost:3002/api/v1/users/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "123456",
+  "name": "Ricardo",
+  "role": "admin"
+}

@@ -12,8 +12,6 @@ import {
 } from "../../domain";
 import { validate } from "class-validator";
 import { plainToInstance } from "class-transformer";
-import { UploadMulti } from "../../domain/use-case/fileUpload/UploadMulti";
-import { UploadedFile } from "express-fileupload";
 
 export class DonationController {
   constructor(private readonly donationRepository: DonationRepository) {}
