@@ -5,5 +5,5 @@ export class CreateMessageDto {
 	content!: string;
 
 	@IsNumber({}, { message: "Chat ID must be a number" })
-	senderId!: number;
+	userId!: number;
 }

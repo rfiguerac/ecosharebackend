@@ -9,7 +9,7 @@ import { FileUploadRoutes } from "./file-upload/routes";
 export class AppRouter {
   static router(): Router {
     const router = Router();
-
+    
     router.use("/api/v1/donations", DonationRouter.router());
     router.use("/api/v1/categories", CategoryRouter.router());
     router.use("/api/v1/users", UserRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
