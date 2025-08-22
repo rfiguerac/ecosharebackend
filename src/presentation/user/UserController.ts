@@ -34,7 +34,7 @@ export class UserController {
   };
   getProfile = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const userId = req.body.user.id; // Extrae el ID del usuario del payload JWT
+      const userId = (req as any).user.id;
       const user = await this.userRepository.getById(userId);
       res.status(200).json(user.toResponse());
     } catch (error) {
