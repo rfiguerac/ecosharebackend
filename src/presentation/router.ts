@@ -17,10 +17,7 @@ export class AppRouter {
       AuthMiddleware.validateJWT,
       UserRouter.router()
     );
-
     router.use("/api/v1/file", FileUploadRoutes.routes);
-
-    router.use("/api/v1/users", AuthMiddleware.validateJWT, UserRouter.router());
     router.use("/api/v1/chats", ChatRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
 
     return router;

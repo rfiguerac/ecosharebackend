@@ -11,7 +11,6 @@ import {
   UpdateUserDto,
   TokenUserDto,
   ChangePasswordUserDto,
-  RefreshTokenUser,
 } from "../../domain";
 
 export class UserDataSourceImpl implements UserDataSource {
