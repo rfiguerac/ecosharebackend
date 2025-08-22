@@ -6,3 +6,6 @@ export * from "./datasources/CategoryDataSource.impl";
 
 export * from "./repositories/UserRepository.impl";
 export * from "./datasources/UserDataSource.impl";
+
+export * from "./repositories/ChatRepository.impl";
+export * from "./datasources/ChatDataSource.impl";

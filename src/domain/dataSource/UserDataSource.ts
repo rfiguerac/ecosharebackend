@@ -1,4 +1,4 @@
-import { LoginUserDto, RegisterUserDto, UpdateUserDto, TokenUserDto, ChangePasswordUserDto, User, RefreshTokenUser, UserToken } from "..";
+import { LoginUserDto, RegisterUserDto, UpdateUserDto, TokenUserDto, ChangePasswordUserDto, User, UserToken } from "..";
 
 export abstract class UserDataSource {
   abstract login(dto: LoginUserDto): Promise<User>;
