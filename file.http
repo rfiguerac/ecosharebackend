@@ -1,0 +1,13 @@
+
+
+### POST /Images Donatio
+
+POST http://localhost:3002/api/v1/upload/donatition/10
+Content-Type: application/json
+
+{
+ "imagesUrl":[
+   "http://example.com/image1.jpg",
+   "http://example.com/image2.jpg"
+ ]
+}

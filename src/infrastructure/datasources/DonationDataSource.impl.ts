@@ -11,10 +11,7 @@ import { PaginationResponse } from "../../domain/dtos/shared/PaginationResponse"
 
 export class DonationDataSourceImpl implements DonationDataSource {
   // Crear una donación
-  async create(
-    data: CreateDonationDto,
-    imageUrls: string[]
-  ): Promise<DonationEntity> {
+  async create(data: CreateDonationDto): Promise<DonationEntity> {
     const donation = await prisma.donation.create({
       data: {
         title: data.title,
@@ -25,18 +22,6 @@ export class DonationDataSourceImpl implements DonationDataSource {
         donorId: data.donorId,
         latitude: data.latitude,
         longitude: data.longitude,
-        // Corrección: Usamos `createMany` dentro de la misma operación
-        images: {
-          createMany: {
-            data: imageUrls.map((url) => ({
-              imageUrl: url,
-            })),
-          },
-        },
-      },
-      // Corrección: Se incluye el array de imágenes en la respuesta
-      include: {
-        images: true,
       },
     });
     return DonationEntity.fromObject(donation);

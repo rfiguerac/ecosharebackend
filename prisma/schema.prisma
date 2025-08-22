@@ -14,15 +14,12 @@ model UserReputation {
   comment    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  // Relación con el usuario que recibe la calificación
-  reviewee   User     @relation("ReviewedUser", fields: [revieweeId], references: [id])
   revieweeId Int
-  // Relación con el usuario que da la calificación
-  reviewer   User     @relation("ReviewingUser", fields: [reviewerId], references: [id])
   reviewerId Int
+  reviewee   User     @relation("ReviewedUser", fields: [revieweeId], references: [id])
+  reviewer   User     @relation("ReviewingUser", fields: [reviewerId], references: [id])
 }
 
-// Actualización del modelo User
 model User {
   id              Int                   @id @default(autoincrement())
   email           String                @unique
@@ -33,7 +30,6 @@ model User {
   updatedAt       DateTime              @updatedAt
   donations       Donation[]            @relation("DonatedBy")
   transactions    DonationTransaction[] @relation("ReceivedBy")
-  // Relaciones para la reputación
   reviewsReceived UserReputation[]      @relation("ReviewedUser")
   reviewsGiven    UserReputation[]      @relation("ReviewingUser")
   tokenId         String?
@@ -49,11 +45,6 @@ model UserToken {
   updatedAt DateTime @updatedAt
 }
 
-enum UserRole {
-  Admin
-  User
-}
-
 model Donation {
   id          Int                  @id @default(autoincrement())
   title       String
@@ -62,14 +53,14 @@ model Donation {
   urgency     Boolean              @default(false)
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
-  categoryId  Int
-  category    Category             @relation(fields: [categoryId], references: [id])
-  donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
   donorId     Int
+  categoryId  Int
   latitude    Float
   longitude   Float
-  transaction DonationTransaction?
+  category    Category             @relation(fields: [categoryId], references: [id])
+  donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
   images      DonationImage[]
+  transaction DonationTransaction?
 }
 
 model DonationImage {
@@ -82,30 +73,32 @@ model DonationImage {
 }
 
 model DonationTransaction {
-  id Int @id @default(autoincrement())
-
-  status    TransactionStatus @default(Reserved)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-
-  donation   Donation @relation(fields: [donationId], references: [id])
-  donationId Int      @unique
-
-  receiver   User @relation("ReceivedBy", fields: [receiverId], references: [id])
+  id         Int               @id @default(autoincrement())
+  status     TransactionStatus @default(Reserved)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  donationId Int               @unique
   receiverId Int
+  donation   Donation          @relation(fields: [donationId], references: [id])
+  receiver   User              @relation("ReceivedBy", fields: [receiverId], references: [id])
+}
+
+model Category {
+  id          Int        @id @default(autoincrement())
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  title       String     @unique
+  icon        String?
+  donations   Donation[]
+}
+
+enum UserRole {
+  Admin
+  User
 }
 
 enum TransactionStatus {
   Reserved
   Donated
-}
-
-model Category {
-  id          Int        @id @default(autoincrement())
-  title       String     @unique
-  description String?
-  icon        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  donations   Donation[]
 }

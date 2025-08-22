@@ -15,7 +15,7 @@ export class AuthMiddleware {
       const payload = await JwtAdapter.validateToken<{ id: string }>(token);
       if (!payload) return res.status(401).json({ error: "Invalid token" });
 
-      req.user = payload;
+      req.body.user = payload;
 
       next();
     } catch (error) {

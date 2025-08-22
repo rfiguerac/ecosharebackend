@@ -1,13 +1,4 @@
-import {
-  IsString,
-  IsNumber,
-  IsEnum,
-  IsOptional,
-  IsUrl,
-  ValidateNested,
-  IsBoolean,
-  IsArray,
-} from "class-validator";
+import { IsString, IsNumber, IsOptional, IsBoolean } from "class-validator";
 import { Type } from "class-transformer";
 
 export class CreateDonationDto {
@@ -24,10 +15,6 @@ export class CreateDonationDto {
 
   @IsString()
   description!: string;
-
-  @IsOptional()
-  @IsArray()
-  imageUrls!: string[];
 
   @IsOptional()
   @Type(() => Number)

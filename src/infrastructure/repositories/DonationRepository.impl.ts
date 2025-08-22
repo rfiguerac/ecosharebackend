@@ -11,11 +11,8 @@ import { PaginationResponse } from "../../domain/dtos/shared/PaginationResponse"
 export class DonationRepositoryImpl implements DonationRepository {
   constructor(private readonly datasource: DonationDataSource) {}
 
-  create = async (
-    dto: CreateDonationDto,
-    imageUrls: string[]
-  ): Promise<Donation> => {
-    return this.datasource.create(dto, imageUrls);
+  create = async (dto: CreateDonationDto): Promise<Donation> => {
+    return this.datasource.create(dto);
   };
 
   getById = async (id: number): Promise<Donation> => {
