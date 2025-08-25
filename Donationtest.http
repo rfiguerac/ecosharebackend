@@ -25,7 +25,7 @@ Content-Type: application/json
   "latitude": 12.345678,
   "longitude": 98.765432,
   "expiryDate": null,
-  "urgency": false
+  "urgent": false
 }
 
 ### PUT /donations/:id
@@ -42,7 +42,7 @@ Content-Type: application/json
   "latitude": 12.345678,
   "longitude": 98.765432,
   "expiryDate": null,
-  "urgency": false,
+  "urgent": false,
   "categoryId": 1
 }
 

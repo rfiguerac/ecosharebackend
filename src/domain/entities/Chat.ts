@@ -1,7 +1,6 @@
 export class Chat {
 	constructor(
 		public id: number,
-		public content: string,
 		public userId: string,
 		public createdAt?: Date,
 		public updatedAt?: Date
@@ -10,7 +9,6 @@ export class Chat {
 	public static fromObject(userData: any): Chat {
 		return new Chat(
 			userData.id,
-			userData.content,
 			userData.userId,
 			userData.createdAt,
 			userData.updatedAt
@@ -20,7 +18,6 @@ export class Chat {
 	public toResponse() {
 		return {
 			id: this.id,
-			content: this.content,
 			userId: this.userId,
 			createdAt: this.createdAt,
 			updatedAt: this.updatedAt,
