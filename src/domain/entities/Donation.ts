@@ -19,7 +19,7 @@ export class Donation {
     public expiryDate: Date | null,
     public urgent: boolean,
     public createdAt?: Date,
-    public updatedAt?: Date,
+    public updatedAt?: Date
   ) {
     this.validate();
   }
