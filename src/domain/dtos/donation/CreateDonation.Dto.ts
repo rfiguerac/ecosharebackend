@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsBoolean } from "class-validator";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 
 export class CreateDonationDto {
   @IsString()
@@ -20,13 +20,13 @@ export class CreateDonationDto {
   @IsNumber()
   latitude!: number;
 
-  @Type(() => Number)
   @IsNumber()
+  @Type(() => Number)
   longitude!: number;
 
-  @Type(() => Boolean)
   @IsBoolean()
-  urgency!: boolean;
+  @Type(() => Boolean)
+  urgent!: boolean;
 
   @IsOptional()
   @Type(() => Date)
