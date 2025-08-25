@@ -14,8 +14,4 @@ export class ChatRepositoryImpl implements ChatRepository {
 	async getAllChats(): Promise<Chat[]> {
 		return this.dataSource.getAllChats();
 	}
-
-	// async addMessage(dto: CreateMessageDto): Promise<void> {
-	// 	await this.dataSource.addMessage(dto);
-	// }
 }

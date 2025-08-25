@@ -34,7 +34,7 @@ export class UpdateDonationDto {
 
   @IsOptional()
   @IsBoolean()
-  urgency?: boolean;
+  urgent?: boolean;
 
   @IsOptional()
   @Type(() => Date)

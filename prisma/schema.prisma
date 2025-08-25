@@ -88,7 +88,7 @@ model Donation {
   title            String
   description      String
   expiryDate       DateTime?
-  urgency          Boolean                               @default(false)
+  urgent           Boolean                               @default(false)
   createdAt        DateTime                              @default(now())
   updatedAt        DateTime                              @updatedAt
   donorId          Int

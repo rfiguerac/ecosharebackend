@@ -17,7 +17,7 @@ export class Donation {
     public latitude: number,
     public longitude: number,
     public expiryDate: Date | null,
-    public urgency: boolean,
+    public urgent: boolean,
     public createdAt?: Date,
     public updatedAt?: Date,
   ) {
@@ -48,7 +48,7 @@ export class Donation {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       expired: this.isExpired(),
-      urgency: this.urgency,
+      urgent: this.urgent,
     };
   }
 
@@ -65,7 +65,7 @@ export class Donation {
       donationData.expiryDate,
       donationData.createdAt,
       donationData.updatedAt,
-      donationData.urgency
+      donationData.urgent
     );
   }
 }

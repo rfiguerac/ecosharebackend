@@ -26,7 +26,7 @@ export class CreateDonationDto {
 
   @Type(() => Boolean)
   @IsBoolean()
-  urgency!: boolean;
+  urgent!: boolean;
 
   @IsOptional()
   @Type(() => Date)

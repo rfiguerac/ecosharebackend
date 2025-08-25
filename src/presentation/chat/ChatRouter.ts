@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { ChatRepositoryImpl, ChatDataSourceImpl } from "../../infrastructure";
 import { ChatController } from "./ChatController";
-import { validateDto } from "../../middleware";
-import { SendMessageDto } from "../../domain";
 
 export class ChatRouter {
 	public static router(): Router {
@@ -13,7 +11,6 @@ export class ChatRouter {
 
 		router.get("/:id", chatController.getChatById);
 		router.get("/my-chats", chatController.getAllChats);
-		// router.post("/new-message", validateDto(CreateMessageDto), chatController.addMessage);
 
 		return router;
 	}

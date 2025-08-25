@@ -21,3 +21,4 @@ export * from "./user/ChangePasswordUser";
 export * from "./chat/GetChatById";
 export * from "./chat/GetAllChats";
 export * from "./chat/SendMessage";
+export * from "./chat/GetMessagesByChatId";
