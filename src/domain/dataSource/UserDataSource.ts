@@ -22,4 +22,5 @@ export abstract class UserDataSource {
     changePasswordUserDto: ChangePasswordUserDto
   ): Promise<User>;
   abstract getById(id: number): Promise<User>;
+  abstract getAll(): Promise<User[]>;
 }

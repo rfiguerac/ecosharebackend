@@ -24,6 +24,7 @@ export class UserRouter {
       userController.register
     );
     router.post("/login", validateDto(LoginUserDto), userController.login);
+    router.get("/users", userController.getAllUsers);
 
     // Rutas protegidas que requieren JWT
     router.use(AuthMiddleware.validateJWT); // Aplica el middleware a las rutas siguientes

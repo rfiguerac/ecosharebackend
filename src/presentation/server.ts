@@ -4,6 +4,7 @@ import fileUpload from "express-fileupload";
 import { errorHandler } from "./errors/errorHandler";
 import { setupSocketServer } from "./socketServer";
 import { Server as HttpServer } from "http";
+import path from "path";
 
 interface Options {
   routes: Router;
@@ -28,8 +29,8 @@ export class Server {
 
     //* Middlewares
     this.app.use(cors());
-    this.app.use(express.json()); // raw
-    this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
     this.app.use(
       fileUpload({
         limits: { fileSize: 50 * 1024 * 1024 },
@@ -37,16 +38,20 @@ export class Server {
     );
 
     //* Public Folder
-
-    this.app.use(express.static("public"));
+    this.app.use(
+      "/public",
+      express.static(path.join(__dirname, "../../public"))
+    );
 
     //* Router
     this.app.use(this.routes);
 
+    //* Error handler
     this.app.use(errorHandler);
 
-    this.app.listen(this.port, () => {
-      console.log(`Server running on port ${this.port}`);
+    //* Start server
+    this.httpServer.listen(this.port, () => {
+      console.log(` Server running on http://localhost:${this.port}`);
     });
   }
 }

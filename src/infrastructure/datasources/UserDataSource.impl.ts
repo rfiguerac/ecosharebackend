@@ -161,4 +161,8 @@ export class UserDataSourceImpl implements UserDataSource {
     });
     return User.fromObject(updatedUser);
   }
+  async getAll(): Promise<User[]> {
+    const users = await prisma.user.findMany();
+    return users.map(User.fromObject);
+  }
 }

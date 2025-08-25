@@ -46,4 +46,7 @@ export class UserRepositoryImpl implements UserRepository {
   async deleteAccount(dto: TokenUserDto): Promise<User> {
     return this.dataSource.deleteAccount(dto);
   }
+  async getAll(): Promise<User[]> {
+    return this.dataSource.getAll();
+  }
 }

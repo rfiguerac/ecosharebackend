@@ -9,6 +9,7 @@ import {
   ChangePasswordUser,
   DeleteUser,
 } from "../../domain";
+import { GetAllUser } from "../../domain/use-case/user/GetAllUser";
 
 export class UserController {
   constructor(private readonly userRepository: UserRepository) {}
@@ -91,6 +92,14 @@ export class UserController {
         req.body
       );
       res.status(200).json(user.toResponse());
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  getAllUsers = async (req: Request, res: Response) => {
+    try {
+      const users = await new GetAllUser(this.userRepository).execute();
+      res.status(200).json(users.map((user) => user.toResponse()));
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }

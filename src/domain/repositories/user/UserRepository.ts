@@ -22,4 +22,5 @@ export abstract class UserRepository {
     changePasswordUserDto: ChangePasswordUserDto
   ): Promise<User>;
   abstract getById(id: number): Promise<User>;
+  abstract getAll(): Promise<User[]>;
 }
