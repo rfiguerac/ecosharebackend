@@ -4,3 +4,5 @@ export * from "./User";
 export * from "./UserToken";
 export * from "./Chat";
 export * from "./ChatMessage";
+
+export * from "./DonationImage";

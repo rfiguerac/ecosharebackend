@@ -1,3 +1,5 @@
+// src/presentation/file-upload/controller.ts
+
 import { Response, Request } from "express";
 
 import { UploadedFile } from "express-fileupload";
@@ -27,8 +29,10 @@ export class FileUploadController {
     const imdRepo = new ImagesDonationRepositoryImpl(imgDataSource);
     const addImagesDonation = new AddImagesDonation(imdRepo);
 
-    await addImagesDonation.execute(imageUrl, donationId);
+    // Guardar los registros de imagen en la base de datos y obtener las entidades creadas
+    const createdImages = await addImagesDonation.execute(imageUrl, donationId);
 
-    res.status(201).json({ imageUrl });
+    // Enviar las entidades de imagen como respuesta
+    res.status(201).json({ images: createdImages });
   };
 }
