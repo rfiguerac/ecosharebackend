@@ -1,5 +1,7 @@
 export * from "./donation/CreateDonation.Dto";
 export * from "./donation/UpdateDonationDto";
+export * from "./donation/CreateDonationTransactionDto";
+export * from "./donation/UpdateDonationTransactionDto";
 export * from "./category/CreateCategoryDto";
 export * from "./category/UpdateCategoryDto";
 export * from "./user/RegisterUserDto";

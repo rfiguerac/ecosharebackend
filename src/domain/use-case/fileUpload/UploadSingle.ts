@@ -9,7 +9,7 @@ export class UploadSingleFile {
     if (!fs.existsSync(folderPath)) {
       console.log(folderPath, "no existe, creando...");
 
-      fs.mkdirSync(folderPath);
+      fs.mkdirSync(folderPath, { recursive: true });
     }
   }
 

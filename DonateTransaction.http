@@ -1,0 +1,31 @@
+### donation transaction
+
+GET http://localhost:3002/api/v1/donation-transactions
+Content-Type: application/json
+
+
+### register donation transaction
+
+POST http://localhost:3002/api/v1/donation-transactions
+Content-Type: application/json
+
+{
+  "donationId": 7,
+  "receiverId": 2,
+  "status": "Reserved"
+}
+
+
+### update donation transaction
+
+PUT http://localhost:3002/api/v1/donation-transactions/3
+Content-Type: application/json
+
+{
+  "status": "Donated"
+}
+
+
+### DELETE donation transaction
+
+DELETE http://localhost:3002/api/v1/donation-transactions/7
