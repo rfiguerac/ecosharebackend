@@ -1,5 +1,7 @@
 // src/domain/entities/Donation.ts
 
+export type DonationStatus = "Available" | "Reserved" | "Donated";
+
 export interface Location {
   id: number;
   latitude: number;
@@ -19,7 +21,8 @@ export class Donation {
     public expiryDate: Date | null,
     public urgent: boolean,
     public createdAt?: Date,
-    public updatedAt?: Date
+    public updatedAt?: Date,
+    public status: DonationStatus = "Available"
   ) {
     this.validate();
   }
@@ -49,23 +52,31 @@ export class Donation {
       updatedAt: this.updatedAt,
       expired: this.isExpired(),
       urgent: this.urgent,
+      status: this.status,
     };
   }
 
   public static fromObject(donationData: any): Donation {
+    const status: DonationStatus = donationData.transaction
+      ? donationData.transaction.status === "Reserved"
+        ? "Reserved"
+        : "Donated"
+      : "Available";
+
     return new Donation(
       donationData.id,
       donationData.title,
       donationData.description,
-      donationData.images, // Corrección: Se pasa directamente el array
+      donationData.images || [],
       donationData.donorId,
       donationData.categoryId,
       donationData.latitude,
       donationData.longitude,
-      donationData.expiryDate,
-      donationData.createdAt,
-      donationData.updatedAt,
-      donationData.urgent
+      donationData.expiryDate ? new Date(donationData.expiryDate) : null,
+      donationData.urgent,
+      donationData.createdAt ? new Date(donationData.createdAt) : undefined,
+      donationData.updatedAt ? new Date(donationData.updatedAt) : undefined,
+      status
     );
   }
 }
