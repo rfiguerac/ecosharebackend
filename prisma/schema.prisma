@@ -41,12 +41,14 @@ model User {
 }
 
 model Chat {
-  id           Int           @id @default(autoincrement())
-  userId       Int
-  user         User          @relation(fields: [userId], references: [id])
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  chatMessages ChatMessage[]
+  id              Int               @id @default(autoincrement())
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+  isRead          Boolean           @default(false)
+  lastMessage     String            
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  chatMessages    ChatMessage[]
 }
 
 model ChatMessage {
