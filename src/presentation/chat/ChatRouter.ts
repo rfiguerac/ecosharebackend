@@ -9,8 +9,8 @@ export class ChatRouter {
 		const chatRepository = new ChatRepositoryImpl(datasource);
 		const chatController = new ChatController(chatRepository);
 
+		router.get("/", chatController.getAllChats);
 		router.get("/:id", chatController.getChatById);
-		router.get("/my-chats", chatController.getAllChats);
 
 		return router;
 	}
