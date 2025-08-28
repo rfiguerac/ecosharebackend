@@ -11,8 +11,11 @@ export function setupSocketServer(httpServer: HttpServer): IOServer {
 	io.on("connection", (socket: Socket) => {
 		console.log("Usuario conectado:", socket.id);
 
-		socket.on("chat:message", (data) => {
-			io.emit("chat:message", data);
+		socket.on("send_message", async (data) => {
+			const sendMessageEmitted = io.emit("send_message", data);
+			const receivedMessageEmitted = socket.to(data.chatId).emit("receive_message", data);
+			console.log("'send_message' emmited", sendMessageEmitted);
+			console.log("'receive_message' emmited", receivedMessageEmitted);
 		});
 
 		socket.on("disconnect", () => {
