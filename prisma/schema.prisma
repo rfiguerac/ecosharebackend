@@ -1,3 +1,4 @@
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -34,21 +35,24 @@ model User {
   reviewsGiven     UserReputation[]      @relation("ReviewingUser")
   tokenId          String?
   token            UserToken?
-  chats            Chat[]
+  chatsAsUser      Chat[]                @relation("UserChat")
+  chatsAsDonor     Chat[]                @relation("DonorChat")
   sentMessages     ChatMessage[]         @relation("sentBy")
   receivedMessages ChatMessage[]         @relation("receivedBy")
   Reports          Reports[]             @relation("reportedBy")
 }
 
 model Chat {
-  id              Int               @id @default(autoincrement())
-  userId          Int
-  user            User              @relation(fields: [userId], references: [id])
-  isRead          Boolean           @default(false)
-  lastMessage     String            
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  chatMessages    ChatMessage[]
+  id           Int           @id @default(autoincrement())
+  userId       Int
+  user         User          @relation("UserChat", fields: [userId], references: [id])
+  donorId      Int
+  donor        User          @relation("DonorChat", fields: [donorId], references: [id])
+  isRead       Boolean       @default(false)
+  lastMessage  String        @default("Start a conversation!")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  chatMessages ChatMessage[]
 }
 
 model ChatMessage {

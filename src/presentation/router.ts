@@ -9,14 +9,14 @@ import { FileUploadRoutes } from "./file-upload/routes";
 import { DonationTransactionRouter } from "./donationTrasaction/DonationTransactionRouter";
 
 export class AppRouter {
-	static router(): Router {
-    const prefix = "/api/v1/"
+  static router(): Router {
+    const prefix = "/api/v1";
     const router = Router();
 
-		router.use(prefix + "/donations", DonationRouter.router());
-		router.use(prefix + "/categories", CategoryRouter.router());
-		router.use(prefix + "/users", UserRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
-		router.use(prefix + "/file", FileUploadRoutes.routes);
+    router.use(prefix + "/donations", DonationRouter.router());
+    router.use(prefix + "/categories", CategoryRouter.router());
+    router.use(prefix + "/users", UserRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
+    router.use(prefix + "/file", FileUploadRoutes.routes);
     router.use(
       prefix + "/donation-transactions",
       DonationTransactionRouter.router()
