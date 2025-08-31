@@ -8,13 +8,13 @@ import {
 export class ChatMessageDataSourceImpl implements ChatMessageDataSource {
   async getMessagesByChatId(chatId: number): Promise<ChatMessage[]> {
     const messages = await prisma.chatMessage.findMany({
-      where: { id: Number(chatId) },
+      where: { chatId: Number(chatId) },
     });
     return messages.map((message) => ChatMessage.fromObject(message));
   }
 
-  async sendMessage(dto: SendMessageDto): Promise<void> {
-    await prisma.chatMessage.create({
+  async sendMessage(dto: SendMessageDto): Promise<ChatMessage> {
+    const message = await prisma.chatMessage.create({
       data: {
         message: dto.message,
         chatId: dto.chatId,
@@ -22,5 +22,6 @@ export class ChatMessageDataSourceImpl implements ChatMessageDataSource {
         receiverId: dto.receiverId,
       },
     });
+    return ChatMessage.fromObject(message);
   }
 }

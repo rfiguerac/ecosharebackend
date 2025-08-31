@@ -1,3 +1,5 @@
+// src/presentation/chat/ChatMessageController.ts
+
 import { Request, Response } from "express";
 import {
   ChatMessageRepository,
@@ -24,8 +26,12 @@ export class ChatMessageController {
 
   sendMessage = async (req: Request, res: Response) => {
     try {
-      const chat = await new SendMessage(this.userRepository).execute(req.body);
-      res.status(201).json(chat);
+      // Modificado para que el caso de uso retorne el mensaje creado
+      const createdMessage = await new SendMessage(this.userRepository).execute(
+        req.body
+      );
+      // Devuelve el mensaje creado en la respuesta
+      res.status(201).json(createdMessage);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
