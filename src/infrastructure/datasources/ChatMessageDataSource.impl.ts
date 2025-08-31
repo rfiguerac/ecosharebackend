@@ -1,3 +1,5 @@
+// src/infrastructure/datasources/ChatMessageDataSource.impl.ts
+
 import { prisma } from "../../data/postgresql";
 import {
   ChatMessage,
@@ -14,7 +16,7 @@ export class ChatMessageDataSourceImpl implements ChatMessageDataSource {
   }
 
   async sendMessage(dto: SendMessageDto): Promise<ChatMessage> {
-    const message = await prisma.chatMessage.create({
+    const createdMessage = await prisma.chatMessage.create({
       data: {
         message: dto.message,
         chatId: dto.chatId,
@@ -22,6 +24,7 @@ export class ChatMessageDataSourceImpl implements ChatMessageDataSource {
         receiverId: dto.receiverId,
       },
     });
-    return ChatMessage.fromObject(message);
+    // Devuelve la instancia de la entidad ChatMessage
+    return ChatMessage.fromObject(createdMessage);
   }
 }
