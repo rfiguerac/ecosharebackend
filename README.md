@@ -27,14 +27,13 @@ Su objetivo es fomentar la **donación responsable** y la **reutilización de re
 - Docker (contenedores y despliegue)  
 
 **Servicios externos** 
-- Geolocalización (Leaflet API)
-- Zustan 
+- Zustand
 
 ---
 
 ## 📂 Estructura del proyecto
-- ecoshare/ → Frontend (React + TS)
-- ecosharebackend/ → Backend (Node + Express + Prisma)
+- Ecoshare/ → Frontend (React + TS)
+- Ecosharebackend/ → Backend (Node + Express + Prisma)
 
 ---
 
@@ -44,40 +43,40 @@ Su objetivo es fomentar la **donación responsable** y la **reutilización de re
 - git clone https://github.com/rfiguerac/ecoshare.git
 - git clone https://github.com/rfiguerac/ecosharebackend.git
 
-### 2. Connfiguración del backend
+### 2. Configuración del backend
 - cd ecosharebackend
-- cp .env.template .env   # Configura tus variables de entorno
+- cp .env.template .env  
 - npm install
-- npm run dev
+- npm run dev\
 La API estará disponible en: http://localhost:3002
 
 ### 3. Configuración del frontend
 - cd ecoshare
 - npm install
-- npm run dev
+- npm run dev\
 La app estará disponible en: http://localhost:5173
 
 ---
 
-## 📂  Endpoints
-- POST /auth/register → Registro de usuario
-- POST /auth/login → Inicio de sesión
-- GET /donations → Listar donaciones
-- POST /donations → Crear donación
-- POST /chat/message → Enviar mensaje
-- GET /admin/users → Gestión de usuarios (admin)
+## 🔗 Endpoints
+- 📡 **POST** `/auth/register` → Registro de usuario  
+- 🔑 **POST** `/auth/login` → Inicio de sesión  
+- 🎁 **GET** `/donations` → Listar donaciones  
+- ➕ **POST** `/donations` → Crear donación  
+- 💬 **POST** `/chat/message` → Enviar mensaje  
+- 👥 **GET** `/admin/users` → Gestión de usuarios (admin)  
 
 ---
 
-## 📂  Roadmap
-**Etapa 1 (MVP):** Registro/login, perfiles, donaciones básicas, búsqueda, chat y panel admin.
-**Etapa 2:** Alertas personalizadas, moderación avanzada, métricas y mejoras UX/UI.
-**Etapa 3:** Escalabilidad, seguridad avanzada y despliegue en la nube.
+## 🗺️ Roadmap
+- **Etapa 1 (MVP):** Registro/login, perfiles, donaciones básicas, búsqueda, chat y panel admin.  
+- **Etapa 2:** Alertas personalizadas, moderación, métricas y mejoras UX/UI.  
+- **Etapa 3:** Escalabilidad, seguridad avanzada y despliegue en la nube.  
 
 ---
 
-## 📂  Contribución 
-- Crea un fork del repositorio.
-- Crea una rama (feature/nueva-funcionalidad).
-- Haz commit siguiendo Conventional Commits.
-- Envía un Pull Request a la rama dev.
+## 🤝 Contribución
+- Haz un **fork** del repositorio.  
+- Crea una **rama** (`feature/nueva-funcionalidad`).  
+- Haz commit siguiendo **Conventional Commits**.  
+- Envía un **Pull Request** a la rama `dev`.  
