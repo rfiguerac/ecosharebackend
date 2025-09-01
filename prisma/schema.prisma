@@ -39,7 +39,7 @@ model User {
   chatsAsDonor     Chat[]                @relation("DonorChat")
   sentMessages     ChatMessage[]         @relation("sentBy")
   receivedMessages ChatMessage[]         @relation("receivedBy")
-  Reports          Reports[]             @relation("reportedBy")
+  Reports          Report[]             @relation("reportedBy")
 }
 
 model Chat {
@@ -68,12 +68,12 @@ model ChatMessage {
   updatedAt  DateTime @updatedAt
 }
 
-model Reports {
+model Report {
   id          Int      @id @default(autoincrement())
   description String
   reporterId  Int
   reporter    User     @relation("reportedBy", fields: [reporterId], references: [id])
-  isReported  Boolean  @default(false)
+  isReviewed  Boolean  @default(false)
   donationId  Int
   donation    Donation @relation("donationBy", fields: [donationId], references: [id])
   createdAt   DateTime @default(now())
@@ -105,7 +105,7 @@ model Donation {
   donor       User                 @relation("DonatedBy", fields: [donorId], references: [id])
   images      DonationImage[]
   transaction DonationTransaction?
-  Reports     Reports[]            @relation("donationBy")
+  Reports     Report[]            @relation("donationBy")
 }
 
 model DonationImage {

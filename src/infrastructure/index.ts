@@ -12,3 +12,6 @@ export * from "./datasources/ChatDataSource.impl";
 
 export * from "./repositories/ChatMessageRepository.impl";
 export * from "./datasources/ChatMessageDataSource.impl";
+
+export * from "./repositories/ReportRepository.impl";
+export * from "./datasources/ReportDataSource.impl";

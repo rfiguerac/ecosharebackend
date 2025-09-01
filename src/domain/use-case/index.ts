@@ -28,3 +28,9 @@ export * from "./donation/transaction/UpdateDonationTransaction";
 export * from "./donation/transaction/DeleteDonationTransaction";
 export * from "./donation/transaction/GetDonateTransaction";
 export * from "./donation/transaction/GetAllDonatiosTransactions";
+
+export * from "./report/CreateReport";
+export * from "./report/UpdateReport";
+export * from "./report/DeleteReport";
+export * from "./report/GetAllReports";
+export * from "./report/GetReportById";

@@ -4,6 +4,7 @@ import { CategoryRouter } from "./category/CategoryRouter";
 import { UserRouter } from "./user/UserRouter";
 import { ChatRouter } from "./chat/ChatRouter";
 import { ChatMessageRouter } from "./chat/ChatMessageRouter";
+import { ReportRouter } from "./report/ReportRouter";
 import { AuthMiddleware } from "../middleware";
 import { FileUploadRoutes } from "./file-upload/routes";
 import { DonationTransactionRouter } from "./donationTrasaction/DonationTransactionRouter";
@@ -23,6 +24,7 @@ export class AppRouter {
     ); // NOTE: Add AuthMiddleware.validateJWT after development
     router.use(prefix + "/chats", ChatRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
     router.use(prefix + "/chat-messages", ChatMessageRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
+    router.use(prefix + "/reports", ReportRouter.router()); // NOTE: Add AuthMiddleware.validateJWT after development
 
     return router;
   }
